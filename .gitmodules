@@ -1,3 +1,0 @@
-[submodule "trd_party/gdal"]
-	path = trd_party/gdal
-	url = https://github.com/OSGeo/gdal
