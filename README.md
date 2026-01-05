@@ -90,3 +90,5 @@ cmake --build .
 cmake --install . --prefix ./install/
 cd ..
 编译至build/libtiff
+
+## 单独编译GDAL
