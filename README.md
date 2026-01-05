@@ -12,7 +12,7 @@ This library supports **C++** and **Python** usage, successfully tested on **Win
 一个用于生成 4GB 及以上**全色与多光谱影像快视图**的项目，具备自适应颜色调整功能。  
 该库支持 **C++** 和 **Python** 使用，已在 **Windows 10 和 Windows 11** 下测试通过。  
 
-Contributor: [Jeiluo Smith and DonaldTrump-coder](https://github.com/Jeiluo)
+Contributor: [Jeiluo Smith](https://github.com/Jeiluo), [Haojun Tang](https://donaldtrump-coder.github.io/)
 
 ---
 
