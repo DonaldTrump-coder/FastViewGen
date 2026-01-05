@@ -1,0 +1,3 @@
+[submodule "trd_party/libtiff"]
+	path = trd_party/libtiff
+	url = https://gitlab.com/libtiff/libtiff

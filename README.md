@@ -73,6 +73,17 @@ Download [MinGW-w64 v13](https://github.com/niXman/mingw-builds-binaries/release
 下载 [MinGW-w64 v13](https://github.com/niXman/mingw-builds-binaries/releases/download/15.2.0-rt_v13-rev0/x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0.7z)，解压后将 `mingw64\bin` 加入环境变量 PATH。  
 
 Verify:
-```cmd
+```
+cmd
 gcc -v
 g++ -v
+```
+
+
+## 单独编译libtiff
+mkdir build
+cd build
+cmake ..
+cmake --build .
+cmake --install . --prefix ./install/
+cd ..
