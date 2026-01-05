@@ -83,7 +83,10 @@ g++ -v
 ## 单独编译libtiff
 mkdir build
 cd build
-cmake ..
+mkdir libtiff
+cd libtiff
+cmake -G "MinGW Makefiles" ..\..\trd_party\libtiff\
 cmake --build .
 cmake --install . --prefix ./install/
 cd ..
+编译至build/libtiff
