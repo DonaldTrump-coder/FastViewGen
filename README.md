@@ -116,13 +116,16 @@ cd ..
 cd .\build\
 mkdir PROJ
 cd PROJ
-cmake -DBUILD_PROJSYNC=OFF ..\..\trd_party\PROJ\ -DSQLITE3_INCLUDE_DIR="../../build/sqlite/install/include" -DSQLITE3_LIBRARY="../../build/sqlite/install/lib/sqlite3.lib" -DEXE_SQLITE3="../../build/sqlite/install/bin/sqlite3.exe" -DTIFF_INCLUDE_DIR="../../build/libtiff/install/include" -DTIFF_LIBRARY="../../build/libtiff/install/lib/tiff.lib" 
-
-## 单独编译TIFF
-
+cmake -DBUILD_PROJSYNC=OFF ..\..\trd_party\PROJ\ -DSQLITE3_INCLUDE_DIR="$(Resolve-Path ../../build/sqlite/install/include)" -DSQLITE3_LIBRARY="$(Resolve-Path ../../build/sqlite/install/lib/sqlite3.lib)" -DEXE_SQLITE3="$(Resolve-Path ../../build/sqlite/install/bin/sqlite3.exe)" -DTIFF_INCLUDE_DIR="$(Resolve-Path ../../build/libtiff/install/include)" -DTIFF_LIBRARY="$(Resolve-Path ../../build/libtiff/install/lib/tiff.lib)" -DCURL_INCLUDE_DIR="$(Resolve-Path ../../build/curl/install/include)" -DCURL_LIBRARY="$(Resolve-Path ../../build/curl/install/lib/libcurl_imp.lib)"
+cmake --build . --config Release
+cmake --install . --prefix ./install/
+cd..
 
 ## 单独编译GDAL
 cd .\build\
 mkdir gdal
 cd gdal
-cmake -G "MinGW Makefiles" ..\..\trd_party\gdal\
+cmake ..\..\trd_party\gdal\ -DPROJ_INCLUDE_DIR="../../build/PROJ/install/include" -DPROJ_LIBRARY="../../build/PROJ/install/lib/proj.lib"
+cmake --build . --config Release
+cmake --install . --prefix ./install/
+cd..
