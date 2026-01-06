@@ -38,7 +38,7 @@ public:
     ~OverviewGenerator();
 
     void setEnhancementMethod(EnhancementMethod method);// 设置增强方法
-    void setTargetSize(const cv::Size& size);// 设置目标尺寸
+    //void setTargetSize(const cv::Size& size);// 设置目标尺寸
     void setOutputPath(const std::string& path);// 设置输出路径
     bool generate(const std::string& imagePath);// 生成快视图
     bool batchGenerate(const std::vector<std::string>& imagePaths);// 批量生成
@@ -57,14 +57,14 @@ public:
 private:
     std::unique_ptr<ImageProcessor> createProcessor(ImageType type);// 创建处理器
     bool validateInput(const std::string& imagePath);// 验证输入
-    bool saveResult(const cv::Mat& image, const std::string& baseName);// 保存结果
+    //bool saveResult(const cv::Mat& image, const std::string& baseName);// 保存结果
     void logMessage(const std::string& message, int level = 0);// 日志记录
 
 private:
     std::unique_ptr<ImageProcessor> m_processor;
     AdaptiveColorMapper m_colorMapper;
     EnhancementMethod m_enhancementMethod;
-    cv::Size m_targetSize;
+    //cv::Size m_targetSize;
     std::string m_outputPath;
     PerformanceStats m_stats;
     bool m_enableParallel;

@@ -97,18 +97,6 @@ cmake --install . --prefix ./install/
 cd ..
 编译至build/libtiff
 
-## 单独编译Sqlite
-cd .\trd_party\
-cd sqlite
-nmake /f makefile.msc
-mkdir ..\..\build\sqlite\install\include
-mkdir ..\..\build\sqlite\install\lib
-mkdir ..\..\build\sqlite\install\bin
-cp sqlite3.h ..\..\build\sqlite\install\include
-cp sqlite3.lib ..\..\build\sqlite\install\lib
-cp sqlite3.dll ..\..\build\sqlite\install\bin
-cp sqlite3.exe ..\..\build\sqlite\install\bin
-
 ## 单独编译curl
 cd build
 mkdir curl
@@ -135,3 +123,13 @@ cmake ..\..\trd_party\gdal\ -DPROJ_INCLUDE_DIR="$(Resolve-Path ../../build/PROJ/
 cmake --build . --config Release
 cmake --install . --prefix ./install/
 cd..
+
+
+## 直接编译
+```
+install.sh
+cd build
+cmake ..
+cmake --build .
+cmake --install .
+```
