@@ -128,7 +128,6 @@ cmake --install . --prefix ./install/
 cd..
 
 
-## 直接编译
 ```
 .\install.sh
 cd build
