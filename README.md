@@ -70,11 +70,14 @@ For large images (e.g., 4–6GB), processing typically involves the following cl
 
 ### 1. Install MinGW-w64 / 安装 MinGW-w64
 Download [MinGW-w64 v13](https://github.com/niXman/mingw-builds-binaries/releases/download/15.2.0-rt_v13-rev0/x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0.7z), unzip, and add `mingw64\bin` to PATH.  
+Download [git]
 下载 [MinGW-w64 v13](https://github.com/niXman/mingw-builds-binaries/releases/download/15.2.0-rt_v13-rev0/x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0.7z)，解压后将 `mingw64\bin` 加入环境变量 PATH。  
+下载 [git]
 
-Verify:
+Verify:S
 ```
 cmd
+git --version
 gcc -v
 g++ -v
 ```
