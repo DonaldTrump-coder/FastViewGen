@@ -1,10 +1,10 @@
-#include "GdalCommon.h"
+#include <iostream>
+#include "tiffio.h"
 
 int main() 
 {
-    GDALAllRegister(); 
-    GdalInitializer gdal;
-    gdal.openTiff("F:/Users/21910/Desktop/Remote_sense/w/1.TIF");
-    std::cout << "GDAL Initialized successfully." << std::endl;
+    TIFF* tif = TIFFOpen("../data/TIFFExamples/BigTIFF.tif", "r");
+    TIFFClose(tif);
+    std::cout<< "TIFF file read successfully."<< std::endl;
     return 0;
 }

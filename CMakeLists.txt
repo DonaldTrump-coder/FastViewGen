@@ -14,21 +14,24 @@ set(PROJ_INSTALL_DIR ${BUILD_DIR}/PROJ/install)
 
 set(GDAL_INSTALL_DIR ${BUILD_DIR}/gdal/install)
 
+set(LIBTIFF_DLL_DIR ${LIBTIFF_INSTALL_DIR}/bin)
+
 add_executable(Fastview4Geo core/src/main.cpp)
 
 # Add include directories for each external library
 include_directories(
     ${LIBTIFF_INSTALL_DIR}/include
-    ${CURL_INSTALL_DIR}/include
-    ${PROJ_INSTALL_DIR}/include
-    ${GDAL_INSTALL_DIR}/include
     ${CMAKE_SOURCE_DIR}/core/include
 )
 
 # Link the external libraries to the executable
+find_package(TIFF REQUIRED PATHS ${LIBTIFF_INSTALL_DIR}/lib/cmake/tiff)
 target_link_libraries(Fastview4Geo 
     ${LIBTIFF_INSTALL_DIR}/lib/tiff.lib
-    ${CURL_INSTALL_DIR}/lib/libcurl_imp.lib
-    ${PROJ_INSTALL_DIR}/lib/proj.lib
-    ${GDAL_INSTALL_DIR}/lib/gdal.lib
+    ${LIBTIFF_INSTALL_DIR}/lib/tiffxx.lib
 )
+
+add_custom_command(TARGET Fastview4Geo POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${LIBTIFF_DLL_DIR}/tiff.dll
+    $<TARGET_FILE_DIR:Fastview4Geo>/tiff.dll)

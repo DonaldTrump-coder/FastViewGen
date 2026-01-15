@@ -131,8 +131,8 @@ cd..
 ```
 .\install.ps1
 cd build
-cmake ..
-cmake --build . --clean-first
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build . --clean-first --config Release
 cmake --install .
 ```
 
