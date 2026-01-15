@@ -7,4 +7,5 @@ int main()
     TIFFClose(tif);
     std::cout<< "TIFF file read successfully."<< std::endl;
     return 0;
+    //123
 }
