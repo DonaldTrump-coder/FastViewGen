@@ -8,7 +8,6 @@
 
 #include <string>
 #include "OverviewGenerator.h"
-#include "GdalCommon.h"
 
 // 图像处理
 class ImageProcessor {

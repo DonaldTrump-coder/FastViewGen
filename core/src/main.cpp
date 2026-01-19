@@ -1,11 +1,12 @@
 #include <iostream>
 #include "tiffio.h"
+#include "Logger.h"
+#include "Reader.h"
 
 int main() 
 {
-    TIFF* tif = TIFFOpen("../data/TIFFExamples/BigTIFF.tif", "r");
-    TIFFClose(tif);
-    std::cout<< "TIFF file read successfully."<< std::endl;
+    {Logger logger(CLEAR_LOG);}
+    {Logger logger("App started!");}
+    Reader reader("./../data/Satellites/Sat1.TIF");
     return 0;
-    //123
 }
