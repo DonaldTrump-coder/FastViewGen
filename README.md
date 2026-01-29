@@ -1,4 +1,4 @@
-# Fastview4Geo — Fast Overview Generator for Large Satellite Images
+# Fastview4Geo: Fast Overview Generator for Large Satellite Images
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
 [![GitHub Repo forks](https://img.shields.io/github/forks/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
