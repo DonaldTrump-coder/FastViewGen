@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Fastview4Geo)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Create build directories for each external dependency
 #CMAKE_BINARY_DIR: the project build DIR
 set(BUILD_DIR ${CMAKE_BINARY_DIR})
@@ -20,6 +23,7 @@ add_executable(Fastview4Geo
                core/src/main.cpp
                core/src/Reader.cpp
                core/src/Logger.cpp
+               core/src/Satellite.cpp
               )
 
 # Add include directories for each external library

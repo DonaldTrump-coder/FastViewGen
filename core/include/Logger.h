@@ -1,3 +1,6 @@
+#ifndef LOGGER_H
+#define LOGGER_H
+
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -17,3 +20,5 @@ public:
     Logger(LogMode mode);
     ~Logger();
 };
+
+#endif // LOGGER_H
