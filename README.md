@@ -1,28 +1,13 @@
-# Fastview4Geo — Fast Overview Generator for Large Remote Sensing Images  
-# Fastview4Geo — 大规模遥感影像快视图生成器
+# Fastview4Geo — Fast Overview Generator for Large Satellite Images
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
 [![GitHub Repo forks](https://img.shields.io/github/forks/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat)](http://www.apache.org/licenses/)  
 ![Last Commit](https://img.shields.io/github/last-commit/Jeiluo/Fastview4Geo?color=green)
 
-A project to generate fast overviews for **panchromatic and multispectral images** of 4GB and above with adaptive color adjustment.  
-This library supports **C++** usage, successfully tested on **Windows 10 and Windows 11**.  
+A project generates fast overviews for **PANCHROMATIC** and **MULTISPECTRAL** satellite images of a size of 4GB and above with adaptive color adjustment.
 
-一个用于生成 4GB 及以上**全色与多光谱影像快视图**的项目，具备自适应颜色调整功能。  
-该库支持 **C++**，已在 **Windows 10 和 Windows 11** 下测试通过。  
-
-Contributor: [Jeiluo Smith](https://github.com/Jeiluo), [Haojun Tang](https://donaldtrump-coder.github.io/)
-
----
-
-## About / 关于项目
-
-### Environment / 环境
-<img src="./resources/environments.png" width="55%" />
-
-### Structure / 项目结构
-<img src="./resources/structure.png" width="55%" />
+Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](https://github.com/Jeiluo)
 
 ---
 
