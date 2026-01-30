@@ -18,6 +18,31 @@ void Satellite::normalize()
     return;
 }
 
+float Satellite::getPixelValue(int row, int col, int band)
+{
+    return 0.0f;
+}
+
+void Satellite::setPixelValue(int row, int col, int band, float value)
+{
+    return;
+}
+
+uint32_t Satellite::getWidth() const
+{
+    return width;
+}
+
+uint32_t Satellite::getHeight() const
+{
+    return height;
+}
+
+uint16_t Satellite::getBands() const
+{
+    return bands;
+}
+
 PAN_Satellite::PAN_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height) : Satellite(tif, bands, width, height)
 {
     if(TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tile_width))
@@ -91,11 +116,15 @@ void PAN_Satellite::read_in_buf()
     // The data is stored in bufVector
 }
 
-template <typename T>
-T PAN_Satellite::getPixelValue(int row, int col)
+float PAN_Satellite::getPixelValue(int row, int col, int band)
 {
-    T* rowData = static_cast<T*>(bufVector[row]);
+    float* rowData = static_cast<float*>(bufVector[row]);
     return rowData[col];
+}
+
+void PAN_Satellite::setPixelValue(int row, int col, int band, float value)
+{
+    static_cast<float*>(bufVector[row])[col] = value;
 }
 
 void PAN_Satellite::normalize()
@@ -133,6 +162,10 @@ void PAN_Satellite::normalize()
     {
         Logger("Turn data into float");
     }
+
+    stretch = new Stretch();
+    stretch->SetType(SatelliteType::MUL);
+    stretch->normalize_data(this);
 }
 
 PAN_Satellite::~PAN_Satellite()
@@ -141,6 +174,7 @@ PAN_Satellite::~PAN_Satellite()
     {
         delete[] buf;
     }
+    delete stretch;
 }
 
 MUL_Satellite::MUL_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height) : Satellite(tif, bands, width, height)
@@ -336,15 +370,22 @@ void MUL_Satellite::read_in_buf()
     }
 }
 
-template <typename T>
-T MUL_Satellite::getPixelValue(int band, int row, int col)
+float MUL_Satellite::getPixelValue(int row, int col, int band)
 {
     if (bufVector[band] != nullptr)
     {
-        T* bandData = static_cast<T*>(bufVector[band]);
+        float* bandData = static_cast<float*>(bufVector[band]);
         return bandData[row * width + col];
     }
-    return T();
+    return float();
+}
+
+void MUL_Satellite::setPixelValue(int row, int col, int band, float value)
+{
+    if (bufVector[band] != nullptr)
+    {
+        static_cast<float*>(bufVector[band])[row * width + col] = value;
+    }
 }
 
 void MUL_Satellite::normalize()
@@ -391,6 +432,10 @@ void MUL_Satellite::normalize()
     {
         Logger("Turn data into float");
     }
+
+    stretch = new Stretch();
+    stretch->SetType(SatelliteType::MUL);
+    stretch->normalize_data(this);
 }
 
 MUL_Satellite::~MUL_Satellite()
@@ -399,4 +444,5 @@ MUL_Satellite::~MUL_Satellite()
     {
         delete[] buf;
     }
+    delete stretch;
 }
