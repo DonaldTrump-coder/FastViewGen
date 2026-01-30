@@ -24,6 +24,7 @@ add_executable(Fastview4Geo
                core/src/Reader.cpp
                core/src/Logger.cpp
                core/src/Satellite.cpp
+               core/src/Stretch.cpp
               )
 
 # Add include directories for each external library

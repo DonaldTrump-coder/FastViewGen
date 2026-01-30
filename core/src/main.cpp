@@ -11,5 +11,6 @@ int main()
     Reader reader("./../data/Satellites/Sat3.tiff");
     std::unique_ptr<Satellite> satellite = reader.get_contents();
     satellite->read_in_buf();
+    satellite->normalize();
     return 0;
 }

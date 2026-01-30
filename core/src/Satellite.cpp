@@ -13,6 +13,11 @@ void Satellite::read_in_buf()
     return;
 }
 
+void Satellite::normalize()
+{
+    return;
+}
+
 PAN_Satellite::PAN_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height) : Satellite(tif, bands, width, height)
 {
     if(TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tile_width))
@@ -91,6 +96,43 @@ T PAN_Satellite::getPixelValue(int row, int col)
 {
     T* rowData = static_cast<T*>(bufVector[row]);
     return rowData[col];
+}
+
+void PAN_Satellite::normalize()
+{
+    if(bitsPerSample == 8 && sampleFormat == 1)
+    {
+        #pragma omp parallel for
+        for (uint32_t row = 0; row < height; row++)
+        {
+            float* temp = new float[width];
+            for(uint32_t x = 0; x < width; x++)
+            {
+                temp[x] = static_cast<float>(static_cast<uint8_t*>(bufVector[row])[x]);
+            }
+
+            delete[] bufVector[row];
+            bufVector[row] = temp;
+        }
+    }
+    else if(bitsPerSample == 16 && sampleFormat == 1)
+    {
+        #pragma omp parallel for
+        for (uint32_t row = 0; row < height; row++)
+        {
+            float* temp = new float[width];
+            for(uint32_t x = 0; x < width; x++)
+            {
+                temp[x] = static_cast<float>(static_cast<uint16_t*>(bufVector[row])[x]);
+            }
+
+            delete[] bufVector[row];
+            bufVector[row] = temp;
+        }
+    }
+    {
+        Logger("Turn data into float");
+    }
 }
 
 PAN_Satellite::~PAN_Satellite()
@@ -251,9 +293,9 @@ void MUL_Satellite::read_in_buf()
                         bufVector[b] = new uint16_t[height * width];
                     }
                 }
+                #pragma omp parallel for
                 for (uint32_t row = 0; row < height; row++)
                 {
-                    #pragma omp parallel for
                     for (uint16_t b = 0; b < bands; b++)
                     {
                         uint16_t* bandData = static_cast<uint16_t*>(bufVector[b]);
@@ -264,7 +306,6 @@ void MUL_Satellite::read_in_buf()
             }
             else if(bitsPerSample == 32 && sampleFormat == 3)
             {
-                #pragma omp parallel for
                 for (uint16_t b = 0; b < bands; b++)
                 {
                     if (bufVector[b] == nullptr)
@@ -272,6 +313,7 @@ void MUL_Satellite::read_in_buf()
                         bufVector[b] = new float[height * width];
                     }
                 }
+                #pragma omp parallel for
                 for (uint32_t row = 0; row < height; row++)
                 {
                     for (uint16_t b = 0; b < bands; b++)
@@ -303,6 +345,52 @@ T MUL_Satellite::getPixelValue(int band, int row, int col)
         return bandData[row * width + col];
     }
     return T();
+}
+
+void MUL_Satellite::normalize()
+{
+    // turn the buf into float
+    if(bitsPerSample == 8 && sampleFormat == 1)
+    {
+        for(uint16_t b = 0; b < bands; b++)
+        {
+            float* temp = new float[height * width];
+
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; row < height; row++)
+            {
+                for(uint32_t x = 0; x < width; x++)
+                {
+                    temp[row * width + x] = static_cast<float>(static_cast<uint8_t*>(bufVector[b])[row * width + x]);
+                }
+            }
+
+            delete[] bufVector[b];
+            bufVector[b] = temp;
+        }
+    }
+    else if(bitsPerSample == 16 && sampleFormat == 1)
+    {
+        for(uint16_t b = 0; b < bands; b++)
+        {
+            float* temp = new float[height * width];
+
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; row < height; row++)
+            {
+                for(uint32_t x = 0; x < width; x++)
+                {
+                    temp[row * width + x] = static_cast<float>(static_cast<uint16_t*>(bufVector[b])[row * width + x]);
+                }
+            }
+
+            delete[] bufVector[b];
+            bufVector[b] = temp;
+        }
+    }
+    {
+        Logger("Turn data into float");
+    }
 }
 
 MUL_Satellite::~MUL_Satellite()

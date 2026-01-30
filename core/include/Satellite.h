@@ -10,6 +10,9 @@ class Satellite
 public:
     Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height);
     virtual void read_in_buf();
+    virtual void normalize();
+    //virtual void save_img(const std::string& filename, int left, int top, int right, int bottom, int height, int width);
+    //virtual void save_whole_img(const std::string& filename, int height, int width);
 protected:
     TIFF* tif = nullptr;
     uint16_t bands; // The number of bands of img
@@ -25,6 +28,7 @@ public:
     PAN_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height);
     void read_in_buf() override;
     ~PAN_Satellite();
+    void normalize() override;
 private:
     uint32_t tile_width = 0; // The width of a tile
     uint32_t tile_length = 0; // The height of a tile
@@ -40,6 +44,7 @@ public:
     MUL_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height);
     ~MUL_Satellite();
     void read_in_buf() override;
+    void normalize() override;
 private:
     uint32_t tile_width = 0; // The width of a tile
     uint32_t tile_length = 0; // The height of a tile
