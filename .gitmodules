@@ -1,3 +1,6 @@
 [submodule "trd_party/libtiff"]
 	path = trd_party/libtiff
 	url = https://github.com/DonaldTrump-coder/libtiff
+[submodule "trd_party/stb"]
+	path = trd_party/stb
+	url = https://github.com/nothings/stb
