@@ -1,0 +1,7 @@
+data:
+  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat1.TIF
+output:
+  imgtype: PNG
+  filename: D:/Projects/Fastview4Geo/output/simpletest.png
+  width: 640
+  height: 640

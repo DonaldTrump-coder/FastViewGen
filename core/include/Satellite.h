@@ -5,7 +5,9 @@
 #include "Logger.h"
 #include <vector>
 #include "Stretch.h"
-#include <stb_image_write.h>
+#include <algorithm>
+
+enum class ImgSavetype;
 
 class Stretch;
 
@@ -21,7 +23,8 @@ public:
     uint32_t getHeight() const;
     uint16_t getBands() const;
     //virtual void save_img(const std::string& filename, int left, int top, int right, int bottom, int height, int width);
-    //virtual void save_whole_img(const std::string& filename, int height, int width);
+    virtual void save_whole_img(const std::string& filename, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3);
+    void set_savetype(ImgSavetype savetype);
 protected:
     TIFF* tif = nullptr;
     uint16_t bands; // The number of bands of img
@@ -29,6 +32,7 @@ protected:
     uint32_t height; // The height of img
     uint16_t bitsPerSample, sampleFormat; // data type of each pixel
     Stretch* stretch; // help to stretch dor the data
+    ImgSavetype imgsavetype;
 };
 // base class of satellite images
 
@@ -41,6 +45,7 @@ public:
     void normalize() override;
     float getPixelValue(int row, int col, int band) override;
     void setPixelValue(int row, int col, int band, float value) override;
+    void save_whole_img(const std::string& filename, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3) override;
 private:
     uint32_t tile_width = 0; // The width of a tile
     uint32_t tile_length = 0; // The height of a tile
@@ -56,6 +61,7 @@ public:
     void normalize() override;
     float getPixelValue(int row, int col, int band) override;
     void setPixelValue(int row, int col, int band, float value) override;
+    void save_whole_img(const std::string& filename, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3) override;
 private:
     uint32_t tile_width = 0; // The width of a tile
     uint32_t tile_length = 0; // The height of a tile

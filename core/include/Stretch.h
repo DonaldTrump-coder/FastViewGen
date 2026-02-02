@@ -13,6 +13,13 @@ enum SatelliteType
     MUL
 };
 
+enum class ImgSavetype
+{
+    PNG
+};
+
+float BilinearInterpolation(float f00, float f01, float f10, float f11, float dx, float dy);
+
 class Stretch
 {
 private:

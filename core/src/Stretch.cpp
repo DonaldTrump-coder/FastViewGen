@@ -3,6 +3,15 @@
 #include <omp.h>
 #include "Logger.h"
 
+float BilinearInterpolation(float f00, float f01, float f10, float f11, float dx, float dy)
+{
+    float result = f00 * (1 - dx) * (1 - dy) + 
+                   f01 * dx * (1 - dy) + 
+                   f10 * (1 - dx) * dy + 
+                   f11 * dx * dy;
+    return result;
+}
+
 void Stretch::SetType(SatelliteType type)
 {
     m_type = type;

@@ -1,4 +1,6 @@
 #include "Satellite.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 
 Satellite::Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height)
 {
@@ -6,6 +8,7 @@ Satellite::Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height)
     this->bands = bands;
     this->width = width;
     this->height = height;
+    this->imgsavetype = ImgSavetype::PNG;
 }
 
 void Satellite::read_in_buf()
@@ -41,6 +44,16 @@ uint32_t Satellite::getHeight() const
 uint16_t Satellite::getBands() const
 {
     return bands;
+}
+
+void Satellite::save_whole_img(const std::string& filename, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    return;
+}
+
+void Satellite::set_savetype(ImgSavetype savetype)
+{
+    imgsavetype = savetype;
 }
 
 PAN_Satellite::PAN_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height) : Satellite(tif, bands, width, height)
@@ -166,6 +179,11 @@ void PAN_Satellite::normalize()
     stretch = new Stretch();
     stretch->SetType(SatelliteType::MUL);
     stretch->normalize_data(this);
+}
+
+void PAN_Satellite::save_whole_img(const std::string& filename, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+
 }
 
 PAN_Satellite::~PAN_Satellite()
@@ -436,6 +454,61 @@ void MUL_Satellite::normalize()
     stretch = new Stretch();
     stretch->SetType(SatelliteType::MUL);
     stretch->normalize_data(this);
+}
+
+void MUL_Satellite::save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    uint8_t* buffer = new uint8_t[result_width * result_height * 3];
+    for(uint32_t row = 0; (int)row < result_height; row++)
+    {
+        for(uint32_t col = 0; (int)col < result_width; col++)
+        {
+            float new_row = row * ((float)height) / ((float)result_height);
+            float new_col = col * ((float)width) / ((float)result_width);
+            int r0 = static_cast<int>(std::floor(new_row));
+            int c0 = static_cast<int>(std::floor(new_col));
+            int r1 = std::min(r0 + 1, (int)(height - 1));
+            int c1 = std::min(c0 + 1, (int)(width - 1));
+            float dx = new_col - c0;
+            float dy = new_row - r0;
+
+            float pixel000 = getPixelValue(r0, c0, band1);
+            float pixel100 = getPixelValue(r0, c0, band2);
+            float pixel200 = getPixelValue(r0, c0, band3);
+            float pixel001 = getPixelValue(r0, c1, band1);
+            float pixel101 = getPixelValue(r0, c1, band2);
+            float pixel201 = getPixelValue(r0, c1, band3);
+            float pixel010 = getPixelValue(r1, c0, band1);
+            float pixel110 = getPixelValue(r1, c0, band2);
+            float pixel210 = getPixelValue(r1, c0, band3);
+            float pixel011 = getPixelValue(r1, c1, band1);
+            float pixel111 = getPixelValue(r1, c1, band2);
+            float pixel211 = getPixelValue(r1, c1, band3);
+
+            float pixelband_0 = BilinearInterpolation(pixel000, pixel001, pixel010, pixel011, dx, dy);
+            float pixelband_1 = BilinearInterpolation(pixel100, pixel101, pixel110, pixel111, dx, dy);
+            float pixelband_2 = BilinearInterpolation(pixel200, pixel201, pixel210, pixel211, dx, dy);
+
+            int index = (row * result_width + col) * 3;
+            buffer[index] = static_cast<uint8_t>(pixelband_0);
+            buffer[index + 1] = static_cast<uint8_t>(pixelband_1);
+            buffer[index + 2] = static_cast<uint8_t>(pixelband_2);
+        }
+    }
+
+    if(imgsavetype == ImgSavetype::PNG)
+    {
+        if(stbi_write_png(filename.c_str(), result_width, result_height, 3, buffer, result_width * 3))
+        {
+            Logger("Save image to " + filename + " successfully");
+        }
+        else
+        {
+            Logger("Save image to " + filename + " failed");
+        }
+    }
+
+    delete[] buffer;
 }
 
 MUL_Satellite::~MUL_Satellite()
