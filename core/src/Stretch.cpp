@@ -23,11 +23,11 @@ void Stretch::normalize_data(Satellite* sat)
     {
         f_min = f_max = sat->getPixelValue(0,0,0);
         #pragma omp parallel for reduction(min:f_min) reduction(max:f_max)
-        for(uint32_t row = 0; row < sat->getWidth(); row++)
+        for(uint32_t row = 0; row < sat->getHeight(); row++)
         {
             float row_min = sat->getPixelValue(row, 0, 0);
             float row_max = row_min;
-            for(uint32_t col = 0; col < sat->getHeight(); col++)
+            for(uint32_t col = 0; col < sat->getWidth(); col++)
             {
                 float val = sat->getPixelValue(row, col, 0);
                 row_min = std::min(row_min, val);
@@ -39,9 +39,9 @@ void Stretch::normalize_data(Satellite* sat)
 
         float range = f_max - f_min;
         #pragma omp parallel for
-        for(uint32_t row = 0; row < sat->getWidth(); row++)
+        for(uint32_t row = 0; row < sat->getHeight(); row++)
         {
-            for(uint32_t col = 0; col < sat->getHeight(); col++)
+            for(uint32_t col = 0; col < sat->getWidth(); col++)
             {
                 float val = sat->getPixelValue(row, col, 0);
                 sat->setPixelValue(row, col, 0, (val - f_min) / range * 255.0f);
@@ -54,11 +54,11 @@ void Stretch::normalize_data(Satellite* sat)
         for(uint16_t b = 0; b < sat->getBands(); b++)
         {
             #pragma omp parallel for reduction(min:f_min) reduction(max:f_max)
-            for(uint32_t row = 0; row < sat->getWidth(); row++)
+            for(uint32_t row = 0; row < sat->getHeight(); row++)
             {
                 float row_min = sat->getPixelValue(row, 0, b);
                 float row_max = row_min;
-                for(uint32_t col = 0; col < sat->getHeight(); col++)
+                for(uint32_t col = 0; col < sat->getWidth(); col++)
                 {
                     float val = sat->getPixelValue(row, col, b);
                     row_min = std::min(row_min, val);
@@ -71,9 +71,9 @@ void Stretch::normalize_data(Satellite* sat)
 
         float range = f_max - f_min;
         #pragma omp parallel for
-        for(uint32_t row = 0; row < sat->getWidth(); row++)
+        for(uint32_t row = 0; row < sat->getHeight(); row++)
         {
-            for(uint32_t col = 0; col < sat->getHeight(); col++)
+            for(uint32_t col = 0; col < sat->getWidth(); col++)
             {
                 for(uint16_t b = 0; b < sat->getBands(); b++)
                 {

@@ -46,3 +46,5 @@ add_custom_command(TARGET Fastview4Geo POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${LIBTIFF_DLL_DIR}/tiff.dll
     $<TARGET_FILE_DIR:Fastview4Geo>/tiff.dll)
+
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)

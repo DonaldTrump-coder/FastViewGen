@@ -172,18 +172,71 @@ void PAN_Satellite::normalize()
             bufVector[row] = temp;
         }
     }
+    else if(bitsPerSample == 32 && sampleFormat == 3)
+    {
+        #pragma omp parallel for collapse(2)
+        for (uint32_t row = 0; row < height; row++)
+        {
+            for(uint32_t x = 0; x < width; x++)
+            {
+                if(static_cast<float>(static_cast<float*>(bufVector[row])[x]) < 0)
+                {
+                    static_cast<float>(static_cast<float*>(bufVector[row])[x]) = 0;
+                }
+            }
+        }
+    }
     {
         Logger("Turn data into float");
     }
 
     stretch = new Stretch();
-    stretch->SetType(SatelliteType::MUL);
+    stretch->SetType(SatelliteType::PAN);
     stretch->normalize_data(this);
 }
 
-void PAN_Satellite::save_whole_img(const std::string& filename, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3)
+void PAN_Satellite::save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
 {
+    uint8_t* buffer = new uint8_t[result_width * result_height];
+    #pragma omp parallel for collapse(2)
+    for(uint32_t row = 0; (int)row < result_height; row++)
+    {
+        for(uint32_t col = 0; (int)col < result_width; col++)
+        {
+            float new_row = row * ((float)height) / ((float)result_height);
+            float new_col = col * ((float)width) / ((float)result_width);
 
+            int r0 = static_cast<int>(std::floor(new_row));
+            int c0 = static_cast<int>(std::floor(new_col));
+            int r1 = std::min(r0 + 1, (int)(height - 1));
+            int c1 = std::min(c0 + 1, (int)(width - 1));
+            float dx = new_col - c0;
+            float dy = new_row - r0;
+
+            float pixel00 = getPixelValue(r0, c0, band1);
+            float pixel01 = getPixelValue(r0, c1, band1);
+            float pixel10 = getPixelValue(r1, c0, band1);
+            float pixel11 = getPixelValue(r1, c1, band1);
+
+            float pixel = BilinearInterpolation(pixel00, pixel01, pixel10, pixel11, dx, dy);
+            int index = row * result_width + col;
+            buffer[index] = static_cast<uint8_t>(pixel);
+        }
+    }
+
+    if (imgsavetype == ImgSavetype::PNG)
+    {
+        if (stbi_write_png(filename.c_str(), result_width, result_height, 1, buffer, result_width))
+        {
+            Logger("Save image to " + filename + " successfully");
+        }
+        else
+        {
+            Logger("Save image to " + filename + " failed");
+        }
+    }
+
+    delete[] buffer;
 }
 
 PAN_Satellite::~PAN_Satellite()
@@ -447,6 +500,23 @@ void MUL_Satellite::normalize()
             bufVector[b] = temp;
         }
     }
+    else if(bitsPerSample == 32 && sampleFormat == 3)
+    {
+        #pragma omp parallel for collapse(3)
+        for(uint16_t b = 0; b < bands; b++)
+        {
+            for(uint32_t row = 0; row < height; row++)
+            {
+                for(uint32_t x = 0; x < width; x++)
+                {
+                    if(static_cast<float>(static_cast<float*>(bufVector[b])[row * width + x]) < 0)
+                    {
+                        static_cast<float>(static_cast<float*>(bufVector[b])[row * width + x]) = 0;
+                    }
+                }
+            }
+        }
+    }
     {
         Logger("Turn data into float");
     }
@@ -459,6 +529,7 @@ void MUL_Satellite::normalize()
 void MUL_Satellite::save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
 {
     uint8_t* buffer = new uint8_t[result_width * result_height * 3];
+    #pragma omp parallel for collapse(2)
     for(uint32_t row = 0; (int)row < result_height; row++)
     {
         for(uint32_t col = 0; (int)col < result_width; col++)
