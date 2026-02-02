@@ -4,3 +4,6 @@
 [submodule "trd_party/stb"]
 	path = trd_party/stb
 	url = https://github.com/nothings/stb
+[submodule "trd_party/yaml_cpp"]
+	path = trd_party/yaml_cpp
+	url = https://github.com/jbeder/yaml-cpp

@@ -5,6 +5,7 @@
 #include "Logger.h"
 #include <vector>
 #include "Stretch.h"
+#include <stb_image_write.h>
 
 class Stretch;
 

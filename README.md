@@ -85,29 +85,11 @@ cmake --install . --prefix ./install/
 cd ..
 编译至build/libtiff
 
-## 单独编译curl
-cd build
-mkdir curl
-cd curl
-cmake ..\..\trd_party\curl\ -DCMAKE_BUILD_TYPE=Release -DCURL_USE_LIBPSL=OFF
-cmake --build . --config Release
-cmake --install . --prefix ./install/
-cd ..
-
-## 单独编译PROJ
+## 单独编译Yaml-cpp
 cd .\build\
-mkdir PROJ
-cd PROJ
-cmake -DBUILD_PROJSYNC=OFF ..\..\trd_party\PROJ\ -DSQLITE3_INCLUDE_DIR="$(Resolve-Path ../../build/sqlite/install/include)" -DSQLITE3_LIBRARY="$(Resolve-Path ../../build/sqlite/install/lib/sqlite3.lib)" -DEXE_SQLITE3="$(Resolve-Path ../../build/sqlite/install/bin/sqlite3.exe)" -DTIFF_INCLUDE_DIR="$(Resolve-Path ../../build/libtiff/install/include)" -DTIFF_LIBRARY="$(Resolve-Path ../../build/libtiff/install/lib/tiff.lib)" -DCURL_INCLUDE_DIR="$(Resolve-Path ../../build/curl/install/include)" -DCURL_LIBRARY="$(Resolve-Path ../../build/curl/install/lib/libcurl_imp.lib)"
-cmake --build . --config Release
-cmake --install . --prefix ./install/
-cd..
-
-## 单独编译GDAL
-cd .\build\
-mkdir gdal
-cd gdal
-cmake ..\..\trd_party\gdal\ -DPROJ_INCLUDE_DIR="$(Resolve-Path ../../build/PROJ/install/include)" -DPROJ_LIBRARY="$(Resolve-Path ../../build/PROJ/install/lib/proj.lib)"
+mkdir yaml_cpp
+cd yaml_cpp
+cmake ..\..\trd_party\yaml_cpp\ -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release
 cmake --install . --prefix ./install/
 cd..

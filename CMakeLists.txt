@@ -11,11 +11,9 @@ set(BUILD_DIR ${CMAKE_BINARY_DIR})
 
 set(LIBTIFF_INSTALL_DIR ${BUILD_DIR}/libtiff/install)
 
-set(CURL_INSTALL_DIR ${BUILD_DIR}/curl/install)
+set(YAMLCPP_INSTALL_DIR ${BUILD_DIR}/yaml_cpp/install)
 
-set(PROJ_INSTALL_DIR ${BUILD_DIR}/PROJ/install)
-
-set(GDAL_INSTALL_DIR ${BUILD_DIR}/gdal/install)
+set(STBIMAGE_DIR ${CMAKE_SOURCE_DIR}/trd_party/stb)
 
 set(LIBTIFF_DLL_DIR ${LIBTIFF_INSTALL_DIR}/bin)
 
@@ -31,13 +29,17 @@ add_executable(Fastview4Geo
 include_directories(
     ${LIBTIFF_INSTALL_DIR}/include
     ${CMAKE_SOURCE_DIR}/core/include
+    ${YAMLCPP_INSTALL_DIR}/include
+    ${STBIMAGE_DIR}
 )
 
 # Link the external libraries to the executable
 find_package(TIFF REQUIRED PATHS ${LIBTIFF_INSTALL_DIR}/lib/cmake/tiff)
+find_package(yaml-cpp REQUIRED PATHS ${YAMLCPP_INSTALL_DIR}/lib/cmake/yaml-cpp)
 target_link_libraries(Fastview4Geo 
     ${LIBTIFF_INSTALL_DIR}/lib/tiff.lib
     ${LIBTIFF_INSTALL_DIR}/lib/tiffxx.lib
+    ${YAMLCPP_INSTALL_DIR}/lib/yaml-cpp.lib
 )
 
 add_custom_command(TARGET Fastview4Geo POST_BUILD
