@@ -193,6 +193,7 @@ void PAN_Satellite::normalize()
     stretch = new Stretch();
     stretch->SetType(SatelliteType::PAN);
     stretch->normalize_data(this);
+    stretch->stretch_data(this);
 }
 
 void PAN_Satellite::save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
@@ -524,6 +525,7 @@ void MUL_Satellite::normalize()
     stretch = new Stretch();
     stretch->SetType(SatelliteType::MUL);
     stretch->normalize_data(this);
+    stretch->stretch_data(this);
 }
 
 void MUL_Satellite::save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
