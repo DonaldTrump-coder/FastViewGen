@@ -28,6 +28,22 @@ void Stretch::set_Stretch_type(std::string& type)
     {
         m_stretch_type = StretchType::LOG;
     }
+    else if(type == "gamma")
+    {
+        m_stretch_type = StretchType::GAMMA;
+    }
+    else if(type == "tile_stretch")
+    {
+        m_stretch_type = StretchType::TILE_STRETCH;
+    }
+    else if(type == "piecewise_linear")
+    {
+        m_stretch_type = StretchType::PIECEWISE_LINEAR;
+    }
+    else if(type == "histo_equal")
+    {
+        m_stretch_type = StretchType::HISTO_EQUAL;
+    }
 }
 
 void Stretch::normalize_data(Satellite* sat)
@@ -181,6 +197,7 @@ void Stretch::stretch_data(Satellite* sat)
         else if(m_stretch_type == StretchType::LOG)
         {
             #pragma omp parallel for collapse(2)
+            float c = (bright_thres - dark_thres) / log(1 + bright_thres - dark_thres);
             for(uint32_t row = 0; row < sat->getHeight(); row++)
             {
                 for(uint32_t col = 0; col < sat->getWidth(); col++)
@@ -197,7 +214,6 @@ void Stretch::stretch_data(Satellite* sat)
                     else
                     {
                         // stretch the data in logarithmic scale
-                        float c = (bright_thres - dark_thres) / log(1 + bright_thres - dark_thres);
                         sat->setPixelValue(row, col, 0, dark_thres + c * log(1 + val - dark_thres));
                     }
                 }
@@ -206,7 +222,164 @@ void Stretch::stretch_data(Satellite* sat)
         }
         else if(m_stretch_type == StretchType::GAMMA)
         {
-            
+            float bound = bright_thres - dark_thres;
+            float gamma = 0.6f;
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; row < sat->getHeight(); row++)
+            {
+                for(uint32_t col = 0; col < sat->getWidth(); col++)
+                {
+                    float val = sat->getPixelValue(row, col, 0);
+                    if(val < dark_thres)
+                    {
+                        sat->setPixelValue(row, col, 0, dark_hist.mapping(val));
+                    }
+                    else if(val > bright_thres)
+                    {
+                        sat->setPixelValue(row, col, 0, bright_hist.mapping(val));
+                    }
+                    else
+                    {
+                        float gamma_val = pow((val - dark_thres) / bound, gamma);
+                        sat->setPixelValue(row, col, 0, dark_thres + gamma_val * bound);
+                    }
+                }
+            }
+            Logger("PAN data stretched in gamma mode");
+        }
+        else if(m_stretch_type == StretchType::TILE_STRETCH)
+        {
+            int x_tiles = 5;
+            int y_tiles = 5; // num of tiles on different directions
+            Histogram* histograms = new Histogram[x_tiles * y_tiles];
+            int tile_w = static_cast<int>(sat->getWidth() / x_tiles);
+            int tile_h = static_cast<int>(sat->getHeight() / y_tiles);
+            int remain_w = sat->getWidth() - tile_w * (x_tiles - 1);
+            int remain_h = sat->getHeight() - tile_h * (y_tiles - 1);
+            int origin_w = tile_w;
+            int origin_h = tile_h;
+            for(int i = 0; i < x_tiles; i++) // index tiles
+            {
+                for(int j = 0; j < y_tiles; j++)
+                {
+                    if(i == x_tiles - 1)
+                    {
+                        tile_w = remain_w;
+                    }
+                    else
+                    {
+                        tile_w = origin_w;
+                    }
+                    if(j == y_tiles - 1)
+                    {
+                        tile_h = remain_h;
+                    }
+                    else
+                    {
+                        tile_h = origin_h;
+                    }
+                    if(i == 0 && j == 0)
+                    {
+                        // linear stretch in the first tile
+                        float min_val = bright_thres;
+                        float max_val = dark_thres;
+                        #pragma omp parallel for collapse(2) reduction(min:min_val) reduction(max:max_val)
+                        for(int x = 0; x < tile_w; x++)
+                        {
+                            for(int y = 0; y < tile_h; y++)
+                            {
+                                float val = sat->getPixelValue(y, x, 0);
+                                if(val <= bright_thres && val >= dark_thres)
+                                {
+                                    min_val = std::min(min_val, val);
+                                    max_val = std::max(max_val, val);
+                                }
+                            }
+                        } // get min and max
+                        
+                        #pragma omp parallel for collapse(2)
+                        for(int x = 0; x < tile_w; x++)
+                        {
+                            for(int y = 0; y < tile_h; y++)
+                            {
+                                float val = sat->getPixelValue(y, x, 0);
+                                if(val <= bright_thres && val >= dark_thres)
+                                {
+                                    float mapped_val = (bright_thres - dark_thres) * (val - min_val) / (max_val - min_val) + dark_thres;
+                                    sat->setPixelValue(y, x, 0, mapped_val);
+                                }
+                            }
+                        }
+                    }
+
+                    histograms[j * x_tiles + i].set_params(dark_thres, bright_thres, 255 * 6);
+                    // calculate in each tile
+                    #pragma omp parallel for collapse(2)
+                    for(int x = 0; x < tile_w; x++)
+                    {
+                        if(i * origin_w + x >= (int)sat->getWidth())
+                        {
+                            continue;
+                        }
+                        for(int y = 0; y < tile_h; y++)
+                        {
+                            if(j * origin_h + y >= (int)sat->getHeight())
+                            {
+                                continue;
+                            }
+                            float val = sat->getPixelValue(j * origin_h + y, i * origin_w + x, 0);
+                            if(val <= bright_thres && val >= dark_thres)
+                            {
+                                histograms[j * x_tiles + i].add_value(val);
+                            }
+                        }
+                    }
+                    // calculate histograms in each tile
+
+                    if(i != 0 || j != 0)
+                    {
+                        // histogram matching with the first tile
+                        histograms[j * x_tiles + i].matching(&histograms[0]);
+
+                        // stretch the data in the tile
+                        #pragma omp parallel for collapse(2)
+                        for(int x = 0; x < tile_w; x++)
+                        {
+                            if(i * origin_w + x >= (int)sat->getWidth())
+                            {
+                                continue;
+                            }
+                            for(int y = 0; y < tile_h; y++)
+                            {
+                                if(j * origin_h + y >= (int)sat->getHeight())
+                                {
+                                    continue;
+                                }
+                                float val = sat->getPixelValue(j * origin_h + y, i * origin_w + x, 0);
+                                if(val < dark_thres)
+                                {
+                                    sat->setPixelValue(j * origin_h + y, i * origin_w + x, 0, dark_hist.mapping(val));
+                                }
+                                else if(val > bright_thres)
+                                {
+                                    sat->setPixelValue(j * origin_h + y, i * origin_w + x, 0, bright_hist.mapping(val));
+                                }
+                                else
+                                {
+                                    sat->setPixelValue(j * origin_h + y, i * origin_w + x, 0, histograms[j * x_tiles + i].mapping(val));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            delete[] histograms;
+            Logger("PAN data stretched in tile stretch mode");
+        }
+        else if(m_stretch_type == StretchType::HISTO_EQUAL)
+        {
+
         }
     }
 }
@@ -217,6 +390,22 @@ StretchType Stretch::get_Stretch_type()
 }
 
 Histogram::Histogram(float min, float max, int bins)
+{
+    m_min = min;
+    m_max = max;
+    m_bins = bins;
+    bin_size = (m_max - m_min) / m_bins;
+    histogram.resize(m_bins, 0);
+    cdf.resize(m_bins, 0);
+    mapping_histogram.resize(m_bins, 0.0f);
+}
+
+Histogram::Histogram()
+{
+    return;
+}
+
+void Histogram::set_params(float min, float max, int bins)
 {
     m_min = min;
     m_max = max;
@@ -275,4 +464,45 @@ float Histogram::mapping(float input)
 {
     int hist_index = std::min(static_cast<int>((input - m_min) / bin_size), m_bins - 1);
     return mapping_histogram[hist_index];
+}
+
+std::vector<int>& Histogram::get_cdf()
+{
+    return cdf;
+}
+
+int Histogram::get_bins()
+{
+    return m_bins;
+}
+
+float Histogram::get_min()
+{
+    return m_min;
+}
+
+float Histogram::get_max()
+{
+    return m_max;
+}
+
+float Histogram::get_bin_size()
+{
+    return bin_size;
+}
+
+void Histogram::matching(Histogram* object_hist)
+{
+    // histogram matching
+    compute_cdf();
+    object_hist->compute_cdf();
+    int target_idx = 0;
+    for(int i = 0; i < m_bins; i++)
+    {
+        while(target_idx < object_hist->get_bins() - 1 && object_hist->get_cdf()[target_idx] < cdf[i])
+        {
+            target_idx++;
+        }
+        mapping_histogram[i] = object_hist->get_min() + (target_idx + 1) * object_hist->get_bin_size();
+    }
 }

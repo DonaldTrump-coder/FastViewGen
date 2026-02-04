@@ -32,12 +32,20 @@ enum class StretchType
 class Histogram
 {
 public:
+    Histogram();
     Histogram(float min, float max, int bins);
+    void set_params(float min, float max, int bins);
     void add_value(float value);
     void compute_cdf();
     float get_percentile(float perc);
     void equalization();
     float mapping(float input);
+    std::vector<int>& get_cdf();
+    int get_bins();
+    float get_min();
+    float get_max();
+    float get_bin_size();
+    void matching(Histogram* object_hist);
 private:
     float m_min, m_max; // min and max values of the histogram
     float bin_size; // size of each bin
