@@ -56,6 +56,11 @@ void Satellite::set_savetype(ImgSavetype savetype)
     imgsavetype = savetype;
 }
 
+void Satellite::set_stretch_type(std::string& stretch_type)
+{
+    s_stretch_type = stretch_type;
+}
+
 PAN_Satellite::PAN_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height) : Satellite(tif, bands, width, height)
 {
     if(TIFFGetField(tif, TIFFTAG_TILEWIDTH, &tile_width))
@@ -144,7 +149,7 @@ void PAN_Satellite::normalize()
 {
     if(bitsPerSample == 8 && sampleFormat == 1)
     {
-        #pragma omp parallel for
+        #pragma omp parallel for collapse(2)
         for (uint32_t row = 0; row < height; row++)
         {
             float* temp = new float[width];
@@ -159,7 +164,7 @@ void PAN_Satellite::normalize()
     }
     else if(bitsPerSample == 16 && sampleFormat == 1)
     {
-        #pragma omp parallel for
+        #pragma omp parallel for collapse(2)
         for (uint32_t row = 0; row < height; row++)
         {
             float* temp = new float[width];
@@ -193,6 +198,7 @@ void PAN_Satellite::normalize()
     stretch = new Stretch();
     stretch->SetType(SatelliteType::PAN);
     stretch->normalize_data(this);
+    stretch->set_Stretch_type(s_stretch_type);
     stretch->stretch_data(this);
 }
 
@@ -525,6 +531,7 @@ void MUL_Satellite::normalize()
     stretch = new Stretch();
     stretch->SetType(SatelliteType::MUL);
     stretch->normalize_data(this);
+    stretch->set_Stretch_type(s_stretch_type);
     stretch->stretch_data(this);
 }
 

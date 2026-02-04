@@ -12,6 +12,7 @@ int main()
     std::string configfile = "D:/Projects/Fastview4Geo/configs/simpletest.yaml";
     std::string savefile = "";
     std::string datafile = "";
+    std::string stretch_type = "";
     int width = 0;
     int height = 0;
     {Logger logger(CLEAR_LOG);}
@@ -22,11 +23,13 @@ int main()
     if(config["data"])
     {
         datafile = config["data"]["filename"].as<std::string>();
+        stretch_type = config["data"]["stretch"].as<std::string>();
     }
 
     Reader reader(datafile.c_str());
     std::unique_ptr<Satellite> satellite = reader.get_contents();
     satellite->read_in_buf();
+    satellite->set_stretch_type(stretch_type);
     satellite->normalize();
 
     if(config["output"])

@@ -8,6 +8,7 @@
 #include <algorithm>
 
 enum class ImgSavetype;
+enum class StretchType;
 
 class Stretch;
 
@@ -25,6 +26,7 @@ public:
     //virtual void save_img(const std::string& filename, int left, int top, int right, int bottom, int height, int width);
     virtual void save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2);
     void set_savetype(ImgSavetype savetype);
+    void set_stretch_type(std::string& stretch_type);
 protected:
     TIFF* tif = nullptr;
     uint16_t bands; // The number of bands of img
@@ -33,6 +35,7 @@ protected:
     uint16_t bitsPerSample, sampleFormat; // data type of each pixel
     Stretch* stretch; // help to stretch dor the data
     ImgSavetype imgsavetype;
+    std::string s_stretch_type; // the type of stretching method
 };
 // base class of satellite images
 

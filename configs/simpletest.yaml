@@ -1,7 +1,8 @@
 data:
-  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat7.tif
+  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat2.TIF
+  stretch: log
 output:
   imgtype: PNG
   filename: D:/Projects/Fastview4Geo/output/simpletest.png
-  width: 300
-  height: 1000
+  width: 1500
+  height: 1500
