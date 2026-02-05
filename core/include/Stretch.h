@@ -25,7 +25,7 @@ enum class StretchType
     LOG,
     GAMMA,
     TILE_STRETCH,
-    PIECEWISE_LINEAR,
+    PIECEWISE_EQUAL,
     HISTO_EQUAL
 };
 
