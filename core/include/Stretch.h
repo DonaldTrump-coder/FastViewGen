@@ -72,4 +72,17 @@ public:
     StretchType get_Stretch_type();
 };
 
+struct HSI
+{
+    float h, s, i;
+};
+
+struct RGB
+{
+    float r, g, b;
+};
+
+HSI rgb2hsi(float r, float g, float b);
+RGB hsi2rgb(float h, float s, float i);
+
 #endif // STRETCH_H

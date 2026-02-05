@@ -171,6 +171,10 @@ void PAN_Satellite::normalize()
             for(uint32_t x = 0; x < width; x++)
             {
                 temp[x] = static_cast<float>(static_cast<uint16_t*>(bufVector[row])[x]);
+                if(temp[x] >= 800.0f)
+                {
+                    temp[x] = 800.0f;
+                }
             }
 
             delete[] bufVector[row];
@@ -500,6 +504,10 @@ void MUL_Satellite::normalize()
                 for(uint32_t x = 0; x < width; x++)
                 {
                     temp[row * width + x] = static_cast<float>(static_cast<uint16_t*>(bufVector[b])[row * width + x]);
+                    if(temp[row * width + x] >= 800.0f)
+                    {
+                        temp[row * width + x] = 800.0f;
+                    }
                 }
             }
 
@@ -518,7 +526,7 @@ void MUL_Satellite::normalize()
                 {
                     if(static_cast<float>(static_cast<float*>(bufVector[b])[row * width + x]) < 0)
                     {
-                        static_cast<float>(static_cast<float*>(bufVector[b])[row * width + x]) = 0;
+                        static_cast<float*>(bufVector[b])[row * width + x] = 0;
                     }
                 }
             }
@@ -532,11 +540,11 @@ void MUL_Satellite::normalize()
     stretch->SetType(SatelliteType::MUL);
     stretch->normalize_data(this);
     stretch->set_Stretch_type(s_stretch_type);
-    stretch->stretch_data(this);
 }
 
 void MUL_Satellite::save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
 {
+    stretch->stretch_data(this, band1, band2, band3);
     uint8_t* buffer = new uint8_t[result_width * result_height * 3];
     #pragma omp parallel for collapse(2)
     for(uint32_t row = 0; (int)row < result_height; row++)

@@ -1,8 +1,11 @@
 data:
-  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat2.TIF
-  stretch: histo_equal
+  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat1.TIF
+  stretch: linear
 output:
   imgtype: PNG
   filename: D:/Projects/Fastview4Geo/output/simpletest.png
-  width: 1800
+  width: 1500
   height: 1500
+  band1: 3
+  band2: 2
+  band3: 1

@@ -28,7 +28,7 @@ config.yaml<br>
 ## Reuslts
 | Stretch Methods | Linear | Log | Gamma | Tile Stretch | Piecewise Equal | Histogram Equal |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Sat1 |   |   |   |   |   |   |
+| Sat1 | <img src="./res/Sat1_linear.png" width=100% height = 100%/> |   |   |   |   |   |
 | Sat2 |   |   |   |   | <img src="./res/Sat2_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat2_histo_equal.png" width=100% height = 100%/> |
 | Sat3 |   |   |   |   |   |   |
 | Sat4 |   |   |   |   |   |   |

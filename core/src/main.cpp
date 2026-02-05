@@ -15,6 +15,9 @@ int main()
     std::string stretch_type = "";
     int width = 0;
     int height = 0;
+    int band1 = 0;
+    int band2 = 1;
+    int band3 = 2;
     {Logger logger(CLEAR_LOG);}
     {Logger logger("App started!");}
 
@@ -42,9 +45,12 @@ int main()
         savefile = config["output"]["filename"].as<std::string>();
         width = config["output"]["width"].as<int>();
         height = config["output"]["height"].as<int>();
+        band1 = config["output"]["band1"].as<int>() - 1;
+        band2 = config["output"]["band2"].as<int>() - 1;
+        band3 = config["output"]["band3"].as<int>() - 1;
     }
 
-    satellite->save_whole_img(savefile, height, width, 0, 1, 2);
+    satellite->save_whole_img(savefile, height, width, band1, band2, band3);
 
     return 0;
 }
