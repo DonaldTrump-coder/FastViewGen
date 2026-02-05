@@ -15,8 +15,8 @@ Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](h
 **In config file:**<br>
 config.yaml<br>
 ├── data<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;├── filename: string<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;└── stretch: enum<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── filename: string<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── stretch: enum<br>
 │                 - linear<br>
 │                 - log<br>
 │                 - gamma<br>
