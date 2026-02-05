@@ -1,11 +1,11 @@
-# Fastview4Geo: Fast Overview Generator for Large Satellite Images
+# FastViewGen: Fast Overviews Generator for Large Satellite Images
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
 [![GitHub Repo forks](https://img.shields.io/github/forks/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat)](http://www.apache.org/licenses/)  
 ![Last Commit](https://img.shields.io/github/last-commit/Jeiluo/Fastview4Geo?color=green)
 
-A project generates fast overviews for **PANCHROMATIC** and **MULTISPECTRAL** satellite images of a size of 4GB and above with adaptive color adjustment.
+A project that generates fast overviews for **PANCHROMATIC** and **MULTISPECTRAL** satellite images of a maximum size of 4GB with adaptive color adjustment.
 
 Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](https://github.com/Jeiluo)
 
