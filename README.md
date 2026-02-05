@@ -1,4 +1,4 @@
-# FastViewGen: Fast Overviews Generator for Large Satellite Images
+# FastViewGener: Fast Overviews Generator for Large Satellite Images
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
 [![GitHub Repo forks](https://img.shields.io/github/forks/Jeiluo/Fastview4Geo?style=social)](https://github.com/Jeiluo/Fastview4Geo)  
@@ -11,61 +11,19 @@ Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](h
 
 ---
 
-## Core Classes and Workflow / 核心类与处理流程
-
-For large images (e.g., 4–6GB), processing typically involves the following classes:  
-处理大体量影像（4–6GB）时，典型处理流程涉及以下类：
-
-1. **GdalInitializer / GDAL 初始化器**  
-   - Initializes the GDAL library for geospatial image reading/writing.  
-   - 初始化 GDAL 库，用于读取和写入遥感影像数据。
-
-2. **MetadataReader / 元数据读取器**  
-   - Reads image metadata: bands, spatial reference, pixel size, image extent, statistics.  
-   - 读取影像元数据：波段信息、空间参考、像素尺寸、影像范围及统计信息。
-
-3. **TileManager / 分块管理器**  
-   - Handles block-based reading/writing and caching to support large images.  
-   - 管理影像分块读取/写入和缓存，保证大图处理时内存安全。
-
-4. **ImageProcessor / 图像处理器 (抽象类)**  
-   - Defines interface: `loadImage`, `enhance`, `applyColorMap`, `generateOverview`, `getImageType`.  
-   - 定义通用接口：`loadImage`、`enhance`、`applyColorMap`、`generateOverview`、`getImageType`。
-
-5. **PanchromaticProcessor / MultispectralProcessor / 全色/多光谱处理器**  
-   - Implements type-specific processing:  
-     - Panchromatic: Retinex, CLAHE, linear stretch, highlight/shadow detection.  
-     - Multispectral: band composition, white balance, color enhancement, histogram matching.  
-   - 实现影像类型特定处理：  
-     - 全色：Retinex、CLAHE、线性拉伸、高光/阴影检测  
-     - 多光谱：波段合成、白平衡、色彩增强、直方图匹配
-
-6. **AdaptiveColorMapper / 自适应颜色映射器**  
-   - Selects color mapping based on image content (cloud, snow, shadow).  
-   - 根据影像内容（云、雪、阴影）自动选择颜色映射策略。
-
-7. **OverviewGenerator / 快视图生成器**  
-   - Generates thumbnails or fast views.  
-   - Supports batch processing and records performance statistics.  
-   - 生成缩略图或快视图，支持批量处理，并记录性能数据。
-
----
-
-## Build and Run (C++) / 编译与运行 (C++)
-
-### 1. Install MinGW-w64 / 安装 MinGW-w64
-Download [MinGW-w64 v13](https://github.com/niXman/mingw-builds-binaries/releases/download/15.2.0-rt_v13-rev0/x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0.7z), unzip, and add `mingw64\bin` to PATH.  
-Download [git]
-下载 [MinGW-w64 v13](https://github.com/niXman/mingw-builds-binaries/releases/download/15.2.0-rt_v13-rev0/x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0.7z)，解压后将 `mingw64\bin` 加入环境变量 PATH。  
-下载 [git]
-
-Verify:S
-```
-cmd
-git --version
-gcc -v
-g++ -v
-```
+## Usage
+**In config file:**<br>
+config.yaml<br>
+├── data
+│   ├── filename: string
+│   └── stretch: enum
+│                 - linear
+│                 - log
+│                 - gamma
+│                 - tile_stretch
+│                 - piecewise_equal
+│                 - histo_equal
+└── output
 
 ## Cloning the Project
 git clone --recursive https://github.com/Jeiluo/Fastview4Geo

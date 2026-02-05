@@ -1,6 +1,6 @@
 data:
   filename: D:/Projects/Fastview4Geo/data/Satellites/Sat2.TIF
-  stretch: tile stretch
+  stretch: log
 output:
   imgtype: PNG
   filename: D:/Projects/Fastview4Geo/output/simpletest.png

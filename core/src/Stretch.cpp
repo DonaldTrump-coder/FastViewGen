@@ -32,15 +32,15 @@ void Stretch::set_Stretch_type(std::string& type)
     {
         m_stretch_type = StretchType::GAMMA;
     }
-    else if(type == "tile stretch")
+    else if(type == "tile_stretch")
     {
         m_stretch_type = StretchType::TILE_STRETCH;
     }
-    else if(type == "piecewise equal")
+    else if(type == "piecewise_equal")
     {
         m_stretch_type = StretchType::PIECEWISE_EQUAL;
     }
-    else if(type == "histo equal")
+    else if(type == "histo_equal")
     {
         m_stretch_type = StretchType::HISTO_EQUAL;
     }
@@ -141,14 +141,15 @@ void Stretch::stretch_data(Satellite* sat)
         {
             for(uint32_t col = 0; col < sat->getWidth(); col++)
             {
+                #pragma omp critical
                 hist.add_value(sat->getPixelValue(row, col, 0));
             }
         }
         hist.compute_cdf();
         // get the initial histogram of data
 
-        dark_thres = hist.get_percentile(0.1f);
-        bright_thres = hist.get_percentile(99.95f); // The threshold values
+        dark_thres = hist.get_percentile(1.0f);
+        bright_thres = hist.get_percentile(99.0f); // The threshold values
         {
             Logger("Dark and bright histogram computed");
         }
@@ -163,10 +164,12 @@ void Stretch::stretch_data(Satellite* sat)
                 float val = sat->getPixelValue(row, col, 0);
                 if(val < dark_thres)
                 {
+                    #pragma omp critical
                     dark_hist.add_value(val);
                 }
                 else if(val > bright_thres)
                 {
+                    #pragma omp critical
                     bright_hist.add_value(val);
                 }
             }
@@ -330,6 +333,7 @@ void Stretch::stretch_data(Satellite* sat)
                             float val = sat->getPixelValue(j * origin_h + y, i * origin_w + x, 0);
                             if(val <= bright_thres && val >= dark_thres)
                             {
+                                #pragma omp critical
                                 histograms[j * x_tiles + i].add_value(val);
                             }
                         }
@@ -380,7 +384,7 @@ void Stretch::stretch_data(Satellite* sat)
         else if(m_stretch_type == StretchType::PIECEWISE_EQUAL)
         {
             int num_pieces = 20;
-            float interval = (99.95f - 0.1f) / num_pieces;
+            float interval = (99.0f - 1.0f) / num_pieces;
             float* lower_intervals = new float[num_pieces];
             float* upper_intervals = new float[num_pieces];
             float* lower_thres = new float[num_pieces];
@@ -390,8 +394,8 @@ void Stretch::stretch_data(Satellite* sat)
             {
                 if(i == 0)
                 {
-                    lower_intervals[i] = 0.1f;
-                    upper_intervals[i] = 0.1f + interval;
+                    lower_intervals[i] = 1.0f;
+                    upper_intervals[i] = 1.0f + interval;
                 }
                 else
                 {
@@ -400,7 +404,7 @@ void Stretch::stretch_data(Satellite* sat)
                 }
                 if(i == num_pieces - 1)
                 {
-                    upper_intervals[i] = 99.95f;
+                    upper_intervals[i] = 99.0f;
                 }
             } // distribute the intervals
 
@@ -439,6 +443,7 @@ void Stretch::stretch_data(Satellite* sat)
                         {
                             if(val >= lower_thres[i] && val < upper_thres[i])
                             {
+                                #pragma omp critical
                                 histograms[i].add_value(val);
                                 break;
                             }
@@ -489,7 +494,46 @@ void Stretch::stretch_data(Satellite* sat)
         }
         else if(m_stretch_type == StretchType::HISTO_EQUAL)
         {
+            Histogram histogram(dark_thres, bright_thres, 255 * 4);
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; row < sat->getHeight(); row++)
+            {
+                for(uint32_t col = 0; col < sat->getWidth(); col++)
+                {
+                    float val = sat->getPixelValue(row, col, 0);
+                    if(val >= dark_thres && val <= bright_thres)
+                    {
+                        #pragma omp critical
+                        histogram.add_value(val);
+                    }
+                }
+            }
 
+            // equalization
+            histogram.equalization();
+
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; row < sat->getHeight(); row++)
+            {
+                for(uint32_t col = 0; col < sat->getWidth(); col++)
+                {
+                    float val = sat->getPixelValue(row, col, 0);
+                    if(val < dark_thres)
+                    {
+                        sat->setPixelValue(row, col, 0, dark_hist.mapping(val));
+                    }
+                    else if(val > bright_thres)
+                    {
+                        sat->setPixelValue(row, col, 0, bright_hist.mapping(val));
+                    }
+                    else
+                    {
+                        sat->setPixelValue(row, col, 0, histogram.mapping(val));
+                    }
+                }
+            }
+
+            Logger("PAN data stretched in histo equal mode");
         }
     }
 }
@@ -566,7 +610,7 @@ void Histogram::equalization()
     #pragma omp parallel for
     for(int i = 0; i < m_bins; i++)
     {
-        mapping_histogram[i] = m_min + ((cdf[i] - cdf_min) / (cdf_max - cdf_min)) * (m_max - m_min);
+        mapping_histogram[i] = m_min + (float(cdf[i] - cdf_min) / float(cdf_max - cdf_min)) * (m_max - m_min);
     }
 }
 
