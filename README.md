@@ -13,17 +13,19 @@ Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](h
 
 ## Usage
 **In config file:**<br>
-config.yaml<br>
-├── data<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── filename: string<br>
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── stretch: enum<br>
-│                 - linear<br>
-│                 - log<br>
-│                 - gamma<br>
-│                 - tile_stretch<br>
-│                 - piecewise_equal<br>
-│                 - histo_equal<br>
-└── output<br>
+```
+config.yaml
+├── data
+│   ├── filename: string
+│   └── stretch: enum
+│          - linear
+│          - log
+│          - gamma
+│          - tile_stretch
+│          - piecewise_equal
+│          - histo_equal
+└── output
+```
 
 ## Reuslts
 | Stretch Methods | Linear | Log | Gamma | Tile Stretch | Piecewise Equal | Histogram Equal |
