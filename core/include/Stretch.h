@@ -68,6 +68,7 @@ public:
     void normalize_data(Satellite* sat);
     void set_Stretch_type(std::string& type);
     void stretch_data(Satellite* sat);
+    void stretch_data(Satellite* sat, uint16_t band1, uint16_t band2, uint16_t band3);
     StretchType get_Stretch_type();
 };
 

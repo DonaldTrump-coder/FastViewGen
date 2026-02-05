@@ -1,8 +1,8 @@
 data:
-  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat7.tif
-  stretch: piecewise_equal
+  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat2.TIF
+  stretch: histo_equal
 output:
   imgtype: PNG
   filename: D:/Projects/Fastview4Geo/output/simpletest.png
-  width: 400
-  height: 2000
+  width: 1800
+  height: 1500

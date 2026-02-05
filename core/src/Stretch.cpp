@@ -494,18 +494,15 @@ void Stretch::stretch_data(Satellite* sat)
         }
         else if(m_stretch_type == StretchType::HISTO_EQUAL)
         {
-            Histogram histogram(dark_thres, bright_thres, 255 * 4);
+            Histogram histogram(0.0f, 225.0f, 255 * 4);
             #pragma omp parallel for collapse(2)
             for(uint32_t row = 0; row < sat->getHeight(); row++)
             {
                 for(uint32_t col = 0; col < sat->getWidth(); col++)
                 {
                     float val = sat->getPixelValue(row, col, 0);
-                    if(val >= dark_thres && val <= bright_thres)
-                    {
                         #pragma omp critical
                         histogram.add_value(val);
-                    }
                 }
             }
 
@@ -518,23 +515,24 @@ void Stretch::stretch_data(Satellite* sat)
                 for(uint32_t col = 0; col < sat->getWidth(); col++)
                 {
                     float val = sat->getPixelValue(row, col, 0);
-                    if(val < dark_thres)
-                    {
-                        sat->setPixelValue(row, col, 0, dark_hist.mapping(val));
-                    }
-                    else if(val > bright_thres)
-                    {
-                        sat->setPixelValue(row, col, 0, bright_hist.mapping(val));
-                    }
-                    else
-                    {
-                        sat->setPixelValue(row, col, 0, histogram.mapping(val));
-                    }
+                    sat->setPixelValue(row, col, 0, histogram.mapping(val));
                 }
             }
 
             Logger("PAN data stretched in histo equal mode");
         }
+    }
+}
+
+void Stretch::stretch_data(Satellite* sat,
+                           uint16_t band1, // R
+                           uint16_t band2, // G
+                           uint16_t band3  // B
+                        )
+{
+    if(m_type == MUL)
+    {
+
     }
 }
 
