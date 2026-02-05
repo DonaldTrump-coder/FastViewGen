@@ -29,11 +29,11 @@ config.yaml<br>
 | Stretch Methods | Linear | Log | Gamma | Tile Stretch | Piecewise Equal | Histogram Equal |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | Sat1 |   |   |   |   |   |   |
-| Sat2 |   |   |   |   | <img src="./res/Sat2_piecewise_equal.png" width=100%/> | <img src="./res/Sat2_histo_equal.png" width=100%/> |
+| Sat2 |   |   |   |   | <img src="./res/Sat2_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat2_histo_equal.png" width=100% height = 100%/> |
 | Sat3 |   |   |   |   |   |   |
 | Sat4 |   |   |   |   |   |   |
 | Sat5 |   |   |   |   |   |   |
-| Sat7 |   |   |   |   | <img src="./res/Sat7_piecewise_equal.png" width=100%/> |   |
+| Sat7 |   |   |   |   | <img src="./res/Sat7_piecewise_equal.png" width=100% height = 100%/> |   |
 
 ## Cloning the Project
 git clone --recursive https://github.com/Jeiluo/Fastview4Geo
