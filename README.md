@@ -14,23 +14,23 @@ Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](h
 ## Usage
 **In config file:**<br>
 config.yaml<br>
-├── data
-│   ├── filename: string
-│   └── stretch: enum
-│                 - linear
-│                 - log
-│                 - gamma
-│                 - tile_stretch
-│                 - piecewise_equal
-│                 - histo_equal
-└── output
+├── data<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;├── filename: string<br>
+│&nbsp;&nbsp;&nbsp;&nbsp;└── stretch: enum<br>
+│                 - linear<br>
+│                 - log<br>
+│                 - gamma<br>
+│                 - tile_stretch<br>
+│                 - piecewise_equal<br>
+│                 - histo_equal<br>
+└── output<br>
 
 ## Reuslts
 | Stretch Methods | Linear | Log | Gamma | Tile Stretch | Piecewise Equal | Histogram Equal |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | Sat1 | <img src="./res/Sat1_linear.png" width=100% height = 100%/> |   |   |   |   |   |
 | Sat2 |   |   |   |   | <img src="./res/Sat2_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat2_histo_equal.png" width=100% height = 100%/> |
-| Sat3 |   |   |   |   |   |   |
+| Sat3 | <img src="./res/Sat3_linear.png" width=100% height = 100%/> |   |   |   |   |   |
 | Sat4 |   |   |   |   |   |   |
 | Sat5 |   |   |   |   |   |   |
 | Sat7 |   |   |   |   | <img src="./res/Sat7_piecewise_equal.png" width=100% height = 100%/> |   |
