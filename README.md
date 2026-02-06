@@ -7,8 +7,8 @@
 
 A project that generates fast overviews for **PANCHROMATIC** and **MULTISPECTRAL** satellite images of a maximum size of 4GB with adaptive color adjustment.
 
-**Contributor:**[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](https://github.com/Jeiluo), [Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
-Thanks to **Sponsor**:[Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
+**Contributor:** [Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](https://github.com/Jeiluo), [Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
+Thanks to **Sponsor:** [Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
 [Central South University](https://www.csu.edu.cn/)<br>
 
 ---
