@@ -171,10 +171,6 @@ void PAN_Satellite::normalize()
             for(uint32_t x = 0; x < width; x++)
             {
                 temp[x] = static_cast<float>(static_cast<uint16_t*>(bufVector[row])[x]);
-                if(temp[x] >= 1000.0f)
-                {
-                    temp[x] = 1000.0f;
-                }
             }
 
             delete[] bufVector[row];
@@ -504,9 +500,9 @@ void MUL_Satellite::normalize()
                 for(uint32_t x = 0; x < width; x++)
                 {
                     temp[row * width + x] = static_cast<float>(static_cast<uint16_t*>(bufVector[b])[row * width + x]);
-                    if(temp[row * width + x] >= 1000.0f)
+                    if(temp[row * width + x] >= 1200.0f)
                     {
-                        temp[row * width + x] = 1000.0f;
+                        temp[row * width + x] = 1200.0f;
                     }
                 }
             }
