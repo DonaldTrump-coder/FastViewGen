@@ -7,9 +7,14 @@
 
 A project that generates fast overviews for **PANCHROMATIC** and **MULTISPECTRAL** satellite images of a maximum size of 4GB with adaptive color adjustment.
 
-Contributor:[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](https://github.com/Jeiluo)
+**Contributor:**[Haojun Tang](https://donaldtrump-coder.github.io/), [Jiahao Zhou](https://github.com/Jeiluo), [Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
+Thanks to **Sponsor**:[Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
+[Central South University](https://www.csu.edu.cn/)<br>
 
 ---
+
+## Data
+The satellite data is from [LargeSatelliteImgs Dataset](https://www.modelscope.cn/datasets/Donald123456/LargeSatelliteImgs), which is a dataset of different kinds (**Panchromatic** and **Multispectral**) of GeoTIFF Satellite Images in a variety of formats (**UINT8**, **UINT16**, **FLOAT32**) and scales (from 400MB to 4GB).<br>
 
 ## Usage
 **In config file:**<br>
