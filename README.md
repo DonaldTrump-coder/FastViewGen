@@ -28,14 +28,14 @@ config.yaml
 ```
 
 ## Reuslts
-| Stretch Methods | &nbsp;&nbsp;Linear&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;Log&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;Gamma&nbsp; | &nbsp;&nbsp;Tile&nbsp;&nbsp; &nbsp;&nbsp;Stretch&nbsp;&nbsp; | Piecewise Equal | Histogram Equal |
+| Stretch Methods | &nbsp;&nbsp;&nbsp;Linear&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;Gamma&nbsp;&nbsp; | Tile &nbsp;&nbsp;&nbsp;Stretch&nbsp;&nbsp;&nbsp; | Piecewise Equal | Histogram Equal |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Sat1 | <img src="./res/Sat1_linear.png" width=100% height = 100%/> | | | | | |
-| Sat2 | | | | | <img src="./res/Sat2_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat2_histo_equal.png" width=100% height = 100%/> |
-| Sat3 | <img src="./res/Sat3_linear.png" width=100% height = 100%/> | <img src="./res/Sat3_log.png" width=100% height = 100%/> | <img src="./res/Sat3_gamma.png" width=100% height = 100%/> | <img src="./res/Sat3_tile_stretch.png" width=100% height = 100%/> | <img src="./res/Sat3_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat3_histo_equal.png" width=100% height = 100%/> |
-| Sat4 | | | | | | |
-| Sat5 | | | | | | |
-| Sat7 | | | | | <img src="./res/Sat7_piecewise_equal.png" width=100% height = 100%/> | |
+| Sat1 | <img src="./res/Sat1_linear.png" width=100%> | <img src="./res/Sat1_log.png" width=100%> | <img src="./res/Sat1_gamma.png" width=100%/> | <img src="./res/Sat1_tile_stretch.png" width=100%/> | <img src="./res/Sat3_piecewise_equal.png" width=100%/> | <img src="./res/Sat1_histo_equal.png" width=100%/> |
+| Sat2 | <img src="./res/Sat2_linear.png" width=100%> | <img src="./res/Sat2_log.png" width=100%> | <img src="./res/Sat2_gamma.png" width=100%/> | <img src="./res/Sat2_tile_stretch.png" width=100%/> | <img src="./res/Sat2_piecewise_equal.png" width=100%> | <img src="./res/Sat2_histo_equal.png" width=100%/> |
+| Sat3 | <img src="./res/Sat3_linear.png" width=100%/> | <img src="./res/Sat3_log.png" width=100%/> | <img src="./res/Sat3_gamma.png" width=100%/> | <img src="./res/Sat3_tile_stretch.png" width=100%/> | <img src="./res/Sat3_piecewise_equal.png" width=100%/> | <img src="./res/Sat3_histo_equal.png" width=100%/> |
+| Sat4 | <img src="./res/Sat4_linear.png" width=100%/> | <img src="./res/Sat4_log.png" width=100%/> | <img src="./res/Sat4_gamma.png" width=100%/> | <img src="./res/Sat4_tile_stretch.png" width=100%/> | <img src="./res/Sat4_piecewise_equal.png" width=100%/> | <img src="./res/Sat4_histo_equal.png" width=100%/> |
+| Sat5 | <img src="./res/Sat5_linear.png" width=100%/> | <img src="./res/Sat5_log.png" width=100%/> | <img src="./res/Sat5_gamma.png" width=100%/> | <img src="./res/Sat5_tile_stretch.png" width=100%/> | <img src="./res/Sat5_piecewise_equal.png" width=100%/> | <img src="./res/Sat5_histo_equal.png" width=100%/> |
+| Sat7 | <img src="./res/Sat7_linear.png" width=100%/> | <img src="./res/Sat7_log.png" width=100%/> | <img src="./res/Sat7_gamma.png" width=100%/> | <img src="./res/Sat7_tile_stretch.png" width=100%/> | <img src="./res/Sat7_piecewise_equal.png" width=100%/> | <img src="./res/Sat7_histo_equal.png" width=100%/> |
 
 ## Cloning the Project
 ```
