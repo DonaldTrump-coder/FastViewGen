@@ -1,6 +1,6 @@
 data:
   filename: D:/Projects/Fastview4Geo/data/Satellites/Sat3.tiff
-  stretch: log
+  stretch: histo_equal
 output:
   imgtype: PNG
   filename: D:/Projects/Fastview4Geo/output/simpletest.png

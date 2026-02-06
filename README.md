@@ -28,71 +28,14 @@ config.yaml
 ```
 
 ## Reuslts
-<table style="width: 100%; table-layout: fixed; text-align: center; vertical-align: middle;">
-  <tr>
-    <th style="width: 18%;">Stretch Methods</th>
-    <th style="width: 13%;">Linear</th>
-    <th style="width: 13%;">Log</th>
-    <th style="width: 13%;">Gamma</th>
-    <th style="width: 13%;">Tile Stretch</th>
-    <th style="width: 13%;">Piecewise Equal</th>
-    <th style="width: 13%;">Histogram Equal</th>
-  </tr>
-  <tr>
-    <td>Sat1</td>
-    <td style="padding: 0.5%;"><img src="./res/Sat1_linear.png" style="width: 100%; height: auto;" /></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-  </tr>
-  <tr>
-    <td>Sat2</td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"><img src="./res/Sat2_piecewise_equal.png" style="width: 100%; height: auto;" /></td>
-    <td style="padding: 0.5%;"><img src="./res/Sat2_histo_equal.png" style="width: 100%; height: auto;" /></td>
-  </tr>
-  <tr>
-    <td>Sat3</td>
-    <td style="padding: 0.5%;"><img src="./res/Sat3_linear.png" style="width: 100%; height: auto;" /></td>
-    <td style="padding: 0.5%;"><img src="./res/Sat3_log.png" style="width: 100%; height: auto;" /></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-  </tr>
-  <tr>
-    <td>Sat4</td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-  </tr>
-  <tr>
-    <td>Sat5</td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-  </tr>
-  <tr>
-    <td>Sat7</td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"></td>
-    <td style="padding: 0.5%;"><img src="./res/Sat7_piecewise_equal.png" style="width: 100%; height: auto;" /></td>
-    <td style="padding: 0.5%;"></td>
-  </tr>
-</table>
+| Stretch Methods | &nbsp;&nbsp;Linear&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;Log&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;Gamma&nbsp; | &nbsp;&nbsp;Tile&nbsp;&nbsp; &nbsp;&nbsp;Stretch&nbsp;&nbsp; | Piecewise Equal | Histogram Equal |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Sat1 | <img src="./res/Sat1_linear.png" width=100% height = 100%/> | | | | | |
+| Sat2 | | | | | <img src="./res/Sat2_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat2_histo_equal.png" width=100% height = 100%/> |
+| Sat3 | <img src="./res/Sat3_linear.png" width=100% height = 100%/> | <img src="./res/Sat3_log.png" width=100% height = 100%/> | <img src="./res/Sat3_gamma.png" width=100% height = 100%/> | <img src="./res/Sat3_tile_stretch.png" width=100% height = 100%/> | <img src="./res/Sat3_piecewise_equal.png" width=100% height = 100%/> | <img src="./res/Sat3_histo_equal.png" width=100% height = 100%/> |
+| Sat4 | | | | | | |
+| Sat5 | | | | | | |
+| Sat7 | | | | | <img src="./res/Sat7_piecewise_equal.png" width=100% height = 100%/> | |
 
 ## Cloning the Project
 ```
