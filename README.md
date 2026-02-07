@@ -33,6 +33,7 @@ config.yaml
 ```
 
 ## Reuslts
+#### Fast Overview Results
 | Stretch Methods | &nbsp;&nbsp;&nbsp;Linear&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;Gamma&nbsp;&nbsp; | Tile &nbsp;&nbsp;&nbsp;Stretch&nbsp;&nbsp;&nbsp; | Piecewise Equal | Histogram Equal |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | Sat1 | <img src="./res/Sat1_linear.png" width=100%> | <img src="./res/Sat1_log.png" width=100%> | <img src="./res/Sat1_gamma.png" width=100%/> | <img src="./res/Sat1_tile_stretch.png" width=100%/> | <img src="./res/Sat1_piecewise_equal.png" width=100%/> | <img src="./res/Sat1_histo_equal.png" width=100%/> |
@@ -41,6 +42,20 @@ config.yaml
 | Sat4 | <img src="./res/Sat4_linear.png" width=100%/> | <img src="./res/Sat4_log.png" width=100%/> | <img src="./res/Sat4_gamma.png" width=100%/> | <img src="./res/Sat4_tile_stretch.png" width=100%/> | <img src="./res/Sat4_piecewise_equal.png" width=100%/> | <img src="./res/Sat4_histo_equal.png" width=100%/> |
 | Sat5 | <img src="./res/Sat5_linear.png" width=100%/> | <img src="./res/Sat5_log.png" width=100%/> | <img src="./res/Sat5_gamma.png" width=100%/> | <img src="./res/Sat5_tile_stretch.png" width=100%/> | <img src="./res/Sat5_piecewise_equal.png" width=100%/> | <img src="./res/Sat5_histo_equal.png" width=100%/> |
 | Sat7 | <img src="./res/Sat7_linear.png" width=100%/> | <img src="./res/Sat7_log.png" width=100%/> | <img src="./res/Sat7_gamma.png" width=100%/> | <img src="./res/Sat7_tile_stretch.png" width=100%/> | <img src="./res/Sat7_piecewise_equal.png" width=100%/> | <img src="./res/Sat7_histo_equal.png" width=100%/> |
+
+---
+
+#### Cropping Results
+|Sat1|Sat2|Sat3|Sat4|
+|:---:|:---:|:---:|:---:|
+|<img src="./res/Sat1_cropping.png" width=100%/>|<img src="./res/Sat2_cropping.png" width=100%/>|<img src="./res/Sat3_cropping.png" width=100%/>|<img src="./res/Sat4_cropping.png" width=100%/>|
+
+---
+
+#### Partitioning Results
+|Sat1|Sat2|Sat4|Sat5|Sat7|
+|:---:|:---:|:---:|:---:|:---:|
+|<img src="./res/Sat1_partitioner.png" width=100%/>|<img src="./res/Sat2_partitioner.png" width=100%/>|<img src="./res/Sat4_partitioner.png" width=100%/>|<img src="./res/Sat5_partitioner.png" width=100%/>|<img src="./res/Sat7_partitioner.png" width=100%/>|
 
 ## Cloning the Project
 ```
@@ -61,7 +76,7 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --clean-first --config Release
 cmake --install .
-./Release/Fastview4Geo.exe
+./Release/FastviewGener.exe
 ```
 
 ## Only build submodules

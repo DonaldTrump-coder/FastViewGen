@@ -23,8 +23,9 @@ public:
     uint32_t getWidth() const;
     uint32_t getHeight() const;
     uint16_t getBands() const;
-    //virtual void save_img(const std::string& filename, int left, int top, int right, int bottom, int height, int width);
+    virtual void save_img(const std::string& filename, float left, float top, float right, float bottom, int height, int width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2);
     virtual void save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2);
+    virtual void save_partitioned_img(const std::string& folder, int result_height, int result_width, int height_num, int width_num, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2);
     void set_savetype(ImgSavetype savetype);
     void set_stretch_type(std::string& stretch_type);
 protected:
@@ -49,6 +50,8 @@ public:
     float getPixelValue(int row, int col, int band) override;
     void setPixelValue(int row, int col, int band, float value) override;
     void save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2) override;
+    void save_img(const std::string& filename, float left, float top, float right, float bottom, int height, int width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2) override;
+    void save_partitioned_img(const std::string& folder, int result_height, int result_width, int height_num, int width_num, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2) override;
 private:
     uint32_t tile_width = 0; // The width of a tile
     uint32_t tile_length = 0; // The height of a tile
@@ -65,6 +68,8 @@ public:
     float getPixelValue(int row, int col, int band) override;
     void setPixelValue(int row, int col, int band, float value) override;
     void save_whole_img(const std::string& filename, int result_height, int result_width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2) override;
+    void save_img(const std::string& filename, float left, float top, float right, float bottom, int height, int width, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2) override;
+    void save_partitioned_img(const std::string& folder, int result_height, int result_width, int height_num, int width_num, uint16_t band1 = 0, uint16_t band2 = 1, uint16_t band3 = 2) override;
 private:
     uint32_t tile_width = 0; // The width of a tile
     uint32_t tile_length = 0; // The height of a tile

@@ -1,0 +1,13 @@
+data:
+  filename: D:/Projects/Fastview4Geo/data/Satellites/Sat7.tif
+  stretch: histo_equal
+output:
+  imgtype: PNG
+  folder: D:/Projects/Fastview4Geo/output
+  width: 400
+  height: 300
+  n_width: 10
+  n_height: 5
+  band1: 3
+  band2: 2
+  band3: 1

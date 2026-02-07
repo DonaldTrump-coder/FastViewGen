@@ -9,12 +9,14 @@
 
 int main()
 {
-    std::string configfile = "D:/Projects/Fastview4Geo/configs/config.yaml";
-    std::string savefile = "";
+    std::string configfile = "D:/Projects/Fastview4Geo/configs/partitioning.yaml";
+    std::string savefolder = "";
     std::string datafile = "";
     std::string stretch_type = "";
     int width = 0;
     int height = 0;
+    int n_width = 0;
+    int n_height = 0;
     int band1 = 0;
     int band2 = 1;
     int band3 = 2;
@@ -42,15 +44,17 @@ int main()
         {
             satellite->set_savetype(ImgSavetype::PNG);
         }
-        savefile = config["output"]["filename"].as<std::string>();
+        savefolder = config["output"]["folder"].as<std::string>();
         width = config["output"]["width"].as<int>();
         height = config["output"]["height"].as<int>();
+        n_width = config["output"]["n_width"].as<int>();
+        n_height = config["output"]["n_height"].as<int>();
         band1 = config["output"]["band1"].as<int>() - 1;
         band2 = config["output"]["band2"].as<int>() - 1;
         band3 = config["output"]["band3"].as<int>() - 1;
     }
 
-    satellite->save_whole_img(savefile, height, width, band1, band2, band3);
+    satellite->save_partitioned_img(savefolder, height, width, n_height, n_width, band1, band2, band3);
 
     return 0;
 }

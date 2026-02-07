@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(Fastview4Geo)
+project(FastviewGener)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,7 +17,7 @@ set(STBIMAGE_DIR ${CMAKE_SOURCE_DIR}/trd_party/stb)
 
 set(LIBTIFF_DLL_DIR ${LIBTIFF_INSTALL_DIR}/bin)
 
-add_executable(Fastview4Geo
+add_executable(FastviewGener
                core/src/main.cpp
                core/src/Reader.cpp
                core/src/Logger.cpp
@@ -36,15 +36,15 @@ include_directories(
 # Link the external libraries to the executable
 find_package(TIFF REQUIRED PATHS ${LIBTIFF_INSTALL_DIR}/lib/cmake/tiff)
 find_package(yaml-cpp REQUIRED PATHS ${YAMLCPP_INSTALL_DIR}/lib/cmake/yaml-cpp)
-target_link_libraries(Fastview4Geo 
+target_link_libraries(FastviewGener
     ${LIBTIFF_INSTALL_DIR}/lib/tiff.lib
     ${LIBTIFF_INSTALL_DIR}/lib/tiffxx.lib
     ${YAMLCPP_INSTALL_DIR}/lib/yaml-cpp.lib
 )
 
-add_custom_command(TARGET Fastview4Geo POST_BUILD
+add_custom_command(TARGET FastviewGener POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     ${LIBTIFF_DLL_DIR}/tiff.dll
-    $<TARGET_FILE_DIR:Fastview4Geo>/tiff.dll)
+    $<TARGET_FILE_DIR:FastviewGener>/tiff.dll)
 
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)

@@ -9,12 +9,16 @@
 
 int main()
 {
-    std::string configfile = "D:/Projects/Fastview4Geo/configs/config.yaml";
+    std::string configfile = "D:/Projects/Fastview4Geo/configs/size_config.yaml";
     std::string savefile = "";
     std::string datafile = "";
     std::string stretch_type = "";
     int width = 0;
     int height = 0;
+    float top = 0;
+    float left = 0;
+    float bottom = 0;
+    float right = 0;
     int band1 = 0;
     int band2 = 1;
     int band3 = 2;
@@ -45,12 +49,16 @@ int main()
         savefile = config["output"]["filename"].as<std::string>();
         width = config["output"]["width"].as<int>();
         height = config["output"]["height"].as<int>();
+        top = config["output"]["top"].as<float>();
+        left = config["output"]["left"].as<float>();
+        bottom = config["output"]["bottom"].as<float>();
+        right = config["output"]["right"].as<float>();
         band1 = config["output"]["band1"].as<int>() - 1;
         band2 = config["output"]["band2"].as<int>() - 1;
         band3 = config["output"]["band3"].as<int>() - 1;
     }
 
-    satellite->save_whole_img(savefile, height, width, band1, band2, band3);
+    satellite->save_img(savefile, left, top, right, bottom, height, width, band1, band2, band3);
 
     return 0;
 }

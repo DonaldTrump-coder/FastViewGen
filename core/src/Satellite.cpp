@@ -51,6 +51,11 @@ void Satellite::save_whole_img(const std::string& filename, int height, int widt
     return;
 }
 
+void Satellite::save_img(const std::string& filename, float left, float top, float right, float bottom, int height, int width, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    return;
+}
+
 void Satellite::set_savetype(ImgSavetype savetype)
 {
     imgsavetype = savetype;
@@ -59,6 +64,11 @@ void Satellite::set_savetype(ImgSavetype savetype)
 void Satellite::set_stretch_type(std::string& stretch_type)
 {
     s_stretch_type = stretch_type;
+}
+
+void Satellite::save_partitioned_img(const std::string& folder, int result_height, int result_width, int height_num, int width_num, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    return;
 }
 
 PAN_Satellite::PAN_Satellite(TIFF* tif, uint16_t bands, uint32_t width, uint32_t height) : Satellite(tif, bands, width, height)
@@ -244,6 +254,145 @@ void PAN_Satellite::save_whole_img(const std::string& filename, int result_heigh
     }
 
     delete[] buffer;
+}
+
+void PAN_Satellite::save_img(const std::string& filename, float left, float top, float right, float bottom, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    uint8_t* buffer = new uint8_t[result_width * result_height];
+    int top_row = static_cast<int>(top * height);
+    int bottom_row = static_cast<int>(bottom * height);
+    int left_col = static_cast<int>(left * width);
+    int right_col = static_cast<int>(right * width);
+    #pragma omp parallel for collapse(2)
+    for(uint32_t row = 0; (int)row < result_height; row++)
+    {
+        for(uint32_t col = 0; (int)col < result_width; col++)
+        {
+            float new_row = row * ((float)(bottom_row - top_row)) / ((float)result_height) + top_row;
+            float new_col = col * ((float)(right_col - left_col)) / ((float)result_width) + left_col;
+
+            int r0 = static_cast<int>(std::floor(new_row));
+            int c0 = static_cast<int>(std::floor(new_col));
+            int r1 = std::min(r0 + 1, (int)(bottom_row - 1));
+            int c1 = std::min(c0 + 1, (int)(right_col - 1));
+            float dx = new_col - c0;
+            float dy = new_row - r0;
+            float pixel00 = getPixelValue(r0, c0, 0);
+            float pixel01 = getPixelValue(r0, c1, 0);
+            float pixel10 = getPixelValue(r1, c0, 0);
+            float pixel11 = getPixelValue(r1, c1, 0);
+
+            float pixel = BilinearInterpolation(pixel00, pixel01, pixel10, pixel11, dx, dy);
+            int index = row * result_width + col;
+            buffer[index] = static_cast<uint8_t>(pixel);
+        }
+    }
+
+    if (imgsavetype == ImgSavetype::PNG)
+    {
+        if (stbi_write_png(filename.c_str(), result_width, result_height, 1, buffer, result_width))
+        {
+            Logger("Save image to " + filename + " successfully");
+        }
+        else
+        {
+            Logger("Save image to " + filename + " failed");
+        }
+    }
+
+    delete[] buffer;
+}
+
+void PAN_Satellite::save_partitioned_img(const std::string& folder, int result_height, int result_width, int height_num, int width_num, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    float* height_percents = new float[height_num + 1];
+    float* width_percents = new float[width_num + 1];
+    float height_step = 1.0f / height_num;
+    float width_step = 1.0f / width_num;
+    for(int i = 0; i <= height_num; i++)
+    {
+        if(i==0)
+        {
+            height_percents[i] = 0.0f;
+        }
+        else if(i==height_num)
+        {
+            height_percents[i] = 1.0f;
+        }
+        else
+        {
+            height_percents[i] = height_step * i;
+        }
+    }
+    for(int i = 0; i <= width_num; i++)
+    {
+        if(i==0)
+        {
+            width_percents[i] = 0.0f;
+        }
+        else if(i==width_num)
+        {
+            width_percents[i] = 1.0f;
+        }
+        else
+        {
+            width_percents[i] = width_step * i;
+        }
+    }
+    #pragma omp parallel for collapse(2)
+    for(int i = 0; i < height_num; i++)
+    {
+        for(int j = 0; j < width_num; j++)
+        {
+            std::string filename = folder + "/" + std::to_string(i) + "_" + std::to_string(j) + ".png";
+            uint8_t* buffer = new uint8_t[result_width * result_height];
+            int top_row = static_cast<int>(height_percents[i] * height);
+            int bottom_row = static_cast<int>(height_percents[i + 1] * height);
+            int left_col = static_cast<int>(width_percents[j] * width);
+            int right_col = static_cast<int>(width_percents[j + 1] * width);
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; (int)row < result_height; row++)
+            {
+                for(uint32_t col = 0; (int)col < result_width; col++)
+                {
+                    float new_row = row * ((float)(bottom_row - top_row)) / ((float)result_height) + top_row;
+                    float new_col = col * ((float)(right_col - left_col)) / ((float)result_width) + left_col;
+
+                    int r0 = static_cast<int>(std::floor(new_row));
+                    int c0 = static_cast<int>(std::floor(new_col));
+                    int r1 = std::min(r0 + 1, (int)(bottom_row - 1));
+                    int c1 = std::min(c0 + 1, (int)(right_col - 1));
+                    float dx = new_col - c0;
+                    float dy = new_row - r0;
+                    float pixel00 = getPixelValue(r0, c0, 0);
+                    float pixel01 = getPixelValue(r0, c1, 0);
+                    float pixel10 = getPixelValue(r1, c0, 0);
+                    float pixel11 = getPixelValue(r1, c1, 0);
+
+                    float pixel = BilinearInterpolation(pixel00, pixel01, pixel10, pixel11, dx, dy);
+                    int index = row * result_width + col;
+                    buffer[index] = static_cast<uint8_t>(pixel);
+                }
+            }
+
+            if (imgsavetype == ImgSavetype::PNG)
+            {
+                if (stbi_write_png(filename.c_str(), result_width, result_height, 1, buffer, result_width))
+                {
+                    Logger("Save image to " + filename + " successfully");
+                }
+                else
+                {
+                    Logger("Save image to " + filename + " failed");
+                }
+            }
+
+            delete[] buffer;
+        }
+    }
+
+    delete[] height_percents;
+    delete[] width_percents;
 }
 
 PAN_Satellite::~PAN_Satellite()
@@ -593,6 +742,173 @@ void MUL_Satellite::save_whole_img(const std::string& filename, int result_heigh
     }
 
     delete[] buffer;
+}
+
+void MUL_Satellite::save_img(const std::string& filename, float left, float top, float right, float bottom, int result_height, int result_width, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    uint8_t* buffer = new uint8_t[result_width * result_height * 3];
+    int top_row = static_cast<int>(top * height);
+    int bottom_row = static_cast<int>(bottom * height);
+    int left_col = static_cast<int>(left * width);
+    int right_col = static_cast<int>(right * width);
+    #pragma omp parallel for collapse(2)
+    for(uint32_t row = 0; (int)row < result_height; row++)
+    {
+        for(uint32_t col = 0; (int)col < result_width; col++)
+        {
+            float new_row = row * ((float)(bottom_row - top_row)) / ((float)result_height) + top_row;
+            float new_col = col * ((float)(right_col - left_col)) / ((float)result_width) + left_col;
+
+            int r0 = static_cast<int>(std::floor(new_row));
+            int c0 = static_cast<int>(std::floor(new_col));
+            int r1 = std::min(r0 + 1, (int)(bottom_row - 1));
+            int c1 = std::min(c0 + 1, (int)(right_col - 1));
+            float dx = new_col - c0;
+            float dy = new_row - r0;
+
+            float pixel000 = getPixelValue(r0, c0, band1);
+            float pixel100 = getPixelValue(r0, c0, band2);
+            float pixel200 = getPixelValue(r0, c0, band3);
+            float pixel001 = getPixelValue(r0, c1, band1);
+            float pixel101 = getPixelValue(r0, c1, band2);
+            float pixel201 = getPixelValue(r0, c1, band3);
+            float pixel010 = getPixelValue(r1, c0, band1);
+            float pixel110 = getPixelValue(r1, c0, band2);
+            float pixel210 = getPixelValue(r1, c0, band3);
+            float pixel011 = getPixelValue(r1, c1, band1);
+            float pixel111 = getPixelValue(r1, c1, band2);
+            float pixel211 = getPixelValue(r1, c1, band3);
+
+            float pixelband_0 = BilinearInterpolation(pixel000, pixel001, pixel010, pixel011, dx, dy);
+            float pixelband_1 = BilinearInterpolation(pixel100, pixel101, pixel110, pixel111, dx, dy);
+            float pixelband_2 = BilinearInterpolation(pixel200, pixel201, pixel210, pixel211, dx, dy);
+
+            int index = (row * result_width + col) * 3;
+            buffer[index] = static_cast<uint8_t>(pixelband_0);
+            buffer[index + 1] = static_cast<uint8_t>(pixelband_1);
+            buffer[index + 2] = static_cast<uint8_t>(pixelband_2);
+        }
+    }
+
+    if(imgsavetype == ImgSavetype::PNG)
+    {
+        if(stbi_write_png(filename.c_str(), result_width, result_height, 3, buffer, result_width * 3))
+        {
+            Logger("Save image to " + filename + " successfully");
+        }
+        else
+        {
+            Logger("Save image to " + filename + " failed");
+        }
+    }
+
+    delete[] buffer;
+}
+
+void MUL_Satellite::save_partitioned_img(const std::string& folder, int result_height, int result_width, int height_num, int width_num, uint16_t band1, uint16_t band2, uint16_t band3)
+{
+    float* height_percents = new float[height_num + 1];
+    float* width_percents = new float[width_num + 1];
+    float height_step = 1.0f / height_num;
+    float width_step = 1.0f / width_num;
+    for(int i = 0; i <= height_num; i++)
+    {
+        if(i==0)
+        {
+            height_percents[i] = 0.0f;
+        }
+        else if(i==height_num)
+        {
+            height_percents[i] = 1.0f;
+        }
+        else
+        {
+            height_percents[i] = height_step * i;
+        }
+    }
+    for(int i = 0; i <= width_num; i++)
+    {
+        if(i==0)
+        {
+            width_percents[i] = 0.0f;
+        }
+        else if(i==width_num)
+        {
+            width_percents[i] = 1.0f;
+        }
+        else
+        {
+            width_percents[i] = width_step * i;
+        }
+    }
+    #pragma omp parallel for collapse(2)
+    for(int i = 0; i < height_num; i++)
+    {
+        for(int j = 0; j < width_num; j++)
+        {
+            std::string filename = folder + "/" + std::to_string(i) + "_" + std::to_string(j) + ".png";
+            uint8_t* buffer = new uint8_t[result_width * result_height * 3];
+            int top_row = static_cast<int>(height_percents[i] * height);
+            int bottom_row = static_cast<int>(height_percents[i + 1] * height);
+            int left_col = static_cast<int>(width_percents[j] * width);
+            int right_col = static_cast<int>(width_percents[j + 1] * width);
+            #pragma omp parallel for collapse(2)
+            for(uint32_t row = 0; (int)row < result_height; row++)
+            {
+                for(uint32_t col = 0; (int)col < result_width; col++)
+                {
+                    float new_row = row * ((float)(bottom_row - top_row)) / ((float)result_height) + top_row;
+                    float new_col = col * ((float)(right_col - left_col)) / ((float)result_width) + left_col;
+
+                    int r0 = static_cast<int>(std::floor(new_row));
+                    int c0 = static_cast<int>(std::floor(new_col));
+                    int r1 = std::min(r0 + 1, (int)(bottom_row - 1));
+                    int c1 = std::min(c0 + 1, (int)(right_col - 1));
+                    float dx = new_col - c0;
+                    float dy = new_row - r0;
+                    
+                    float pixel000 = getPixelValue(r0, c0, band1);
+                    float pixel100 = getPixelValue(r0, c0, band2);
+                    float pixel200 = getPixelValue(r0, c0, band3);
+                    float pixel001 = getPixelValue(r0, c1, band1);
+                    float pixel101 = getPixelValue(r0, c1, band2);
+                    float pixel201 = getPixelValue(r0, c1, band3);
+                    float pixel010 = getPixelValue(r1, c0, band1);
+                    float pixel110 = getPixelValue(r1, c0, band2);
+                    float pixel210 = getPixelValue(r1, c0, band3);
+                    float pixel011 = getPixelValue(r1, c1, band1);
+                    float pixel111 = getPixelValue(r1, c1, band2);
+                    float pixel211 = getPixelValue(r1, c1, band3);
+
+                    float pixelband_0 = BilinearInterpolation(pixel000, pixel001, pixel010, pixel011, dx, dy);
+                    float pixelband_1 = BilinearInterpolation(pixel100, pixel101, pixel110, pixel111, dx, dy);
+                    float pixelband_2 = BilinearInterpolation(pixel200, pixel201, pixel210, pixel211, dx, dy);
+
+                    int index = (row * result_width + col) * 3;
+                    buffer[index] = static_cast<uint8_t>(pixelband_0);
+                    buffer[index + 1] = static_cast<uint8_t>(pixelband_1);
+                    buffer[index + 2] = static_cast<uint8_t>(pixelband_2);
+                }
+            }
+
+            if (imgsavetype == ImgSavetype::PNG)
+            {
+                if (stbi_write_png(filename.c_str(), result_width, result_height, 3, buffer, result_width * 3))
+                {
+                    Logger("Save image to " + filename + " successfully");
+                }
+                else
+                {
+                    Logger("Save image to " + filename + " failed");
+                }
+            }
+
+            delete[] buffer;
+        }
+    }
+
+    delete[] height_percents;
+    delete[] width_percents;
 }
 
 MUL_Satellite::~MUL_Satellite()
