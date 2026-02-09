@@ -10,7 +10,7 @@ A project that generates fast overviews for **PANCHROMATIC** and **MULTISPECTRAL
 **Contributor:** [Haojun Tang](https://donaldtrump-coder.github.io/), [Yuyang Wu](https://github.com/neil666-com), [Jiahao Zhou](https://github.com/Jeiluo), [Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
 Thanks to **Sponsor:** [Hongbo Pan](https://faculty.csu.edu.cn/panhongbo/zh_CN/index.htm)<br>
 [Central South University](https://en.csu.edu.cn/)<br>
-<h3><a href="https://donaldtrump-coder.github.io/FastViewGen/">Project Page</a></h3>
+<h3><a href="https://donaldtrump-coder.github.io/FastViewGen/" target="_blank">Project Page</a></h3>
 
 ---
 
