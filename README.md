@@ -30,6 +30,14 @@ config.yaml
 │          - piecewise_equal
 │          - histo_equal
 └── output
+    ├── imgtype: enum
+    │       - PNG
+    ├── filename: string
+    ├── width: int
+    ├── height: int
+    ├── band1: int
+    ├── band2: int
+    └── band3: int
 ```
 
 ## Reuslts
@@ -56,6 +64,16 @@ config.yaml
 |Sat1|Sat2|Sat4|Sat5|Sat7|
 |:---:|:---:|:---:|:---:|:---:|
 |<img src="./res/Sat1_partitioner.png" width=100%/>|<img src="./res/Sat2_partitioner.png" width=100%/>|<img src="./res/Sat4_partitioner.png" width=100%/>|<img src="./res/Sat5_partitioner.png" width=100%/>|<img src="./res/Sat7_partitioner.png" width=100%/>|
+
+## Method
+Over view of our Pipeline:
+![Overview](./docs/static/images/Overview.png)
+<br>
+
+Structure of Classes used in this project:
+<figure>
+    <img src="./docs/static/images/Classes.png" alt="Classes" style="width: 30%;">
+</figure>
 
 ## Cloning the Project
 ```
