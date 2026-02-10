@@ -41,7 +41,7 @@ config.yaml
     └── band3: int
 ```
 
-## Reuslts
+## Results
 #### Fast Overview Results
 | Stretch Methods | &nbsp;&nbsp;&nbsp;Linear&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;Gamma&nbsp;&nbsp; | Tile &nbsp;&nbsp;&nbsp;Stretch&nbsp;&nbsp;&nbsp; | Piecewise Equal | Histogram Equal |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
